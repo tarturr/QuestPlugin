@@ -1,0 +1,4 @@
+name: QuestPlugin
+version: '${project.version}'
+main: eu.skyrp.questpluginproject.QuestPlugin
+api-version: '1.18'
