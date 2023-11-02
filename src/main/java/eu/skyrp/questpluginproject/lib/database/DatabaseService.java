@@ -1,0 +1,20 @@
+package eu.skyrp.questpluginproject.lib.database;
+
+public enum DatabaseService {
+
+    SQLITE(""),
+    MYSQL("com.mysql.cj.jdbc.Driver"),
+    POSTGRESQL("org.postgresql.Driver"),
+    MARIADB("org.mariadb.jdbc.Driver");
+
+    private final String driverPackage;
+
+    DatabaseService(String driverPackage) {
+        this.driverPackage = driverPackage;
+    }
+
+    public String getPackage() {
+        return this.driverPackage;
+    }
+
+}
