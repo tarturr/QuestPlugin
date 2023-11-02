@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.lib.database;
+package eu.skyrp.questpluginproject.lib.database.connection;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

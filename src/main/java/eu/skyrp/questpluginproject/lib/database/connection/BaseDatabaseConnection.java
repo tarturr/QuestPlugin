@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.lib.database;
+package eu.skyrp.questpluginproject.lib.database.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -48,5 +48,9 @@ public abstract class BaseDatabaseConnection {
 
     public String getDatabaseName() {
         return dbName;
+    }
+
+    public Connection get() {
+        return connection;
     }
 }

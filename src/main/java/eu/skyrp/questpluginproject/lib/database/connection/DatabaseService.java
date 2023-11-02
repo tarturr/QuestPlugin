@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.lib.database;
+package eu.skyrp.questpluginproject.lib.database.connection;
 
 public enum DatabaseService {
 
