@@ -4,25 +4,47 @@ import org.bukkit.event.Event;
 
 import java.util.UUID;
 
+/**
+ * Classe qui représente un objectif de quête dont l'avancée peut être notée sous forme de chiffre.
+ * @param <T> Type d'Event bukkit qui doit être appelé.
+ * @param <U> Type de la cible incluse dans l'objectif de quête.
+ */
 public abstract class BaseCountableQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Countable {
 
     protected final int amount;
     protected int count;
 
-    public BaseCountableQuestObjective(String id, UUID player, U targetType, int amount) {
-        super(id, player, targetType);
+    /**
+     * @param id Id de la quête.
+     * @param playerUUID UUID du joueur concerné par la quête.
+     * @param target Objet inclus dans l'objectif de quête.
+     * @param amount Nombre requis pour atteindre le bout de la quête.
+     */
+    public BaseCountableQuestObjective(String id, UUID playerUUID, U target, int amount) {
+        super(id, playerUUID, target);
         this.amount = amount;
     }
 
+    /**
+     * Augmenter l'avancée de la quête.
+     */
     protected void incrementCount() {
         ++this.count;
     }
 
+    /**
+     * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
+     * @return Avancée du joueur sous forme de nombre entier.
+     */
     @Override
     public final int getCount() {
         return this.count;
     }
 
+    /**
+     * Obtienir un montant de l'objectif requis
+     * @return Le montant de l'objectif requis.
+     */
     @Override
     public final int getAmount() {
         return this.amount;

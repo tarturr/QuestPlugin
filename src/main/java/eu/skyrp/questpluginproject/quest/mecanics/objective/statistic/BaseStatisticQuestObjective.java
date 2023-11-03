@@ -9,13 +9,19 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 
 import java.util.UUID;
 
+
+/**
+ * Classe qui représente un objectif de quête dont l'avancée peut être gérée par une Statistic.
+ * @param <T> Type de la cible incluse dans l'objectif de quête.
+ * @see Statistic
+ */
 public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<PlayerStatisticIncrementEvent, T> implements Countable {
 
     protected final Statistic type;
     protected int amount;
 
-    public BaseStatisticQuestObjective(String id, UUID player, Statistic type, T targetType, int amount) {
-        super(id, player, targetType);
+    public BaseStatisticQuestObjective(String id, UUID player, Statistic type, T target, int amount) {
+        super(id, player, target);
         this.type = type;
         this.amount = amount;
     }
