@@ -1,9 +1,12 @@
-package eu.skyrp.questpluginproject.lib.database.connection;
+package eu.skyrp.questpluginproject.loaders;
 
+import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
+import eu.skyrp.questpluginproject.lib.database.connection.DatabaseConnection;
+import eu.skyrp.questpluginproject.lib.database.connection.LocalDatabaseConnection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DatabaseConnectionEstablisher {
+public class DatabaseConnectionLoader {
 
     private final JavaPlugin plugin;
     private final FileConfiguration config;
@@ -14,7 +17,7 @@ public class DatabaseConnectionEstablisher {
 
     private BaseDatabaseConnection databaseConnection;
 
-    public DatabaseConnectionEstablisher(JavaPlugin plugin, String rootDatabasePath, String databaseName) {
+    public DatabaseConnectionLoader(JavaPlugin plugin, String rootDatabasePath, String databaseName) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.rootDatabasePath = rootDatabasePath;

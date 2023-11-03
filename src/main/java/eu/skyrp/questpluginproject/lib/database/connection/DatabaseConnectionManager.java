@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.lib.database.connection;
 
+import eu.skyrp.questpluginproject.loaders.DatabaseConnectionLoader;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +24,7 @@ public class DatabaseConnectionManager {
         for (String databaseName : rootDatabaseSection.getKeys(false)) {
             String path = rootToAllDatabases + "." + databaseName;
 
-            DatabaseConnectionEstablisher connection = new DatabaseConnectionEstablisher(plugin, path, databaseName);
+            DatabaseConnectionLoader connection = new DatabaseConnectionLoader(plugin, path, databaseName);
             connection.open();
 
             this.connections.add(connection.getConnection());
