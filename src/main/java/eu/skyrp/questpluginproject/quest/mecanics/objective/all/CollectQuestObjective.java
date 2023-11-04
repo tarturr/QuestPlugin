@@ -18,8 +18,6 @@ public class CollectQuestObjective extends BaseCountableQuestObjective<EntityPic
     @Override
     @EventHandler
     public void onEventTriggered(EntityPickupItemEvent event) {
-        ItemStack item = event.getItem().getItemStack();
-
         // TODO : A faire
     }
 }
