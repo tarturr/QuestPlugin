@@ -41,7 +41,7 @@ public abstract class BaseBlockQuestObjective<T extends BlockEvent> extends Base
          TODO: Modifier la classe pour prendre soit un Material, soit un CustomBlock de ItemsAdder, soit le CustomBlock
            de SlimeFun en U de BaseCountableQuestObjective<T, U>
          */
-        if (!(block.getType() == super.target.getType() && !this.hasElemPlayer(player, block))) {
+        if (!(isTarget(block) && !this.hasElemPlayer(player, block))) {
             return;
         }
 
@@ -53,6 +53,23 @@ public abstract class BaseBlockQuestObjective<T extends BlockEvent> extends Base
         if (super.getCount() >= super.getAmount()) {
             player.sendMessage("§a[Quests] Quête terminée !");
         }
+    }
+
+    /**
+     * Check si le block correspond a la bonne target
+     * @param block block ciblé
+     * @return true Si la target et bloc corresponde
+     */
+    private boolean isTarget(Block block) {
+        SlimefunItem slimefunItem = BlockStorage.check(block);
+        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
+
+        if (slimefunItem != null) {
+            return slimefunItem.getItem().isSimilar(super.target);
+        } else if (customBlock != null) {
+            return customBlock.getItemStack().isSimilar(super.target);
+        }
+        return block.getType() == super.target.getType();
     }
 
     protected abstract Player getEventPlayer(T event);
