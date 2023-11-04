@@ -2,6 +2,8 @@ package eu.skyrp.questpluginproject.quest.mecanics.objective.cache;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -87,10 +89,13 @@ public abstract class BaseBlockQuestObjective<T extends BlockEvent> extends Base
         String item   = parts[1];
 
         if (prefix.equalsIgnoreCase("ia") || prefix.equalsIgnoreCase("itemsadder")) {
-            return CustomBlock.getInstance(item).getItemStack();
+            return CustomBlock.isInRegistry(item) ? CustomBlock.getInstance(item).getItemStack() : null;
+        } else if (prefix.equalsIgnoreCase("sf") || prefix.equalsIgnoreCase("slimefun")) {
+            SlimefunItem slimefunItem = SlimefunItem.getById(item);
+            return slimefunItem != null ? slimefunItem.getItem() : null;
         } else {
             throw new IllegalArgumentException("The \"" + prefix + "\" item is not recognized by the plugin. " +
-                    "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder.");
+                    "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder or \"sf:\"/\"slimefun:\" prefix for Slimefun.");
         }
     }
 }
