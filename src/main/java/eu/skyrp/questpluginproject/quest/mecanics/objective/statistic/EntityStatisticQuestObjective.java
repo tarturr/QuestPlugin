@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.statistic;
 
+import eu.skyrp.questpluginproject.quest.mecanics.objective.Countable;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
@@ -12,11 +13,23 @@ import java.util.UUID;
  */
 public class EntityStatisticQuestObjective extends BaseStatisticQuestObjective<EntityType> {
 
-    public EntityStatisticQuestObjective(String id, UUID player, Statistic type, EntityType targetType, int amount) {
-        super(id, player, type, targetType, amount);
-        super.amount += this.getCount() - 1;
+    /**
+     * Constructeur de la classe EntityStatisticQuestObjective.
+     * @param id Id de la quête.
+     * @param playerUUID UUID du joueur concerné par la quête.
+     * @param target Objet inclus dans l'objectif de quête.
+     * @param type Type de Statistic à vérifier.
+     * @param amount Nombre requis pour atteindre le bout de la quête.
+     */
+    public EntityStatisticQuestObjective(String id, UUID playerUUID, Statistic type, EntityType target, int amount) {
+        super(id, playerUUID, type, target, amount);
     }
 
+    /**
+     * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
+     * @return Avancée du joueur sous forme de nombre entier.
+     * @see Countable#getCount()
+     */
     @Override
     public final int getCount() {
         return super.player().getStatistic(this.type, super.target);

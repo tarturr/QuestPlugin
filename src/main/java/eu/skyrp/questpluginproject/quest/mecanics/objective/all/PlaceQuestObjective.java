@@ -2,33 +2,22 @@ package eu.skyrp.questpluginproject.quest.mecanics.objective.all;
 
 import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
 import lombok.Builder;
-import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.UUID;
 
-public class PlaceQuestObjective extends BaseCountableQuestObjective<BlockPlaceEvent, Material> {
+public class PlaceQuestObjective extends BaseCountableQuestObjective<BlockPlaceEvent, Block> {
 
     @Builder
-    public PlaceQuestObjective(String id, UUID player, Material blockType, int toReach) {
-        super(id, player, blockType, toReach);
+    public PlaceQuestObjective(String id, UUID player, Block target, int toReach) {
+        super(id, player, target, toReach);
     }
 
     @Override
     @EventHandler
     public void onEventTriggered(BlockPlaceEvent event) {
-        if (event.getBlockPlaced().getType() != super.target) {
-            return;
-        }
-
-        super.incrementCount();
-
-        if (super.getCount() < super.getAmount()) {
-            return;
-        }
-
-        event.getPlayer().sendMessage("§a[Quests] Quête terminée !");
+        // TODO : A faire
     }
-
 }

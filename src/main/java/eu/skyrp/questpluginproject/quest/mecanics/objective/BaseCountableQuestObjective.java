@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 public abstract class BaseCountableQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Countable {
 
-    protected final int amount;
-    protected int count;
+    private final int amount;
+    private int count;
 
     /**
      * @param id Id de la quête.
@@ -22,31 +22,29 @@ public abstract class BaseCountableQuestObjective<T extends Event, U> extends Ba
      */
     public BaseCountableQuestObjective(String id, UUID playerUUID, U target, int amount) {
         super(id, playerUUID, target);
-        this.amount = amount;
+        this.amount = amount > 0 ? amount - 1 : 0;
+        this.count = 0;
     }
 
     /**
-     * Augmenter l'avancée de la quête.
-     */
-    protected void incrementCount() {
-        ++this.count;
-    }
-
-    /**
-     * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
-     * @return Avancée du joueur sous forme de nombre entier.
-     */
-    @Override
-    public final int getCount() {
-        return this.count;
-    }
-
-    /**
-     * Obtienir un montant de l'objectif requis
+     * @see Countable#getAmount()
      * @return Le montant de l'objectif requis.
      */
     @Override
     public final int getAmount() {
         return this.amount;
+    }
+
+    protected final void incrementCount() {
+        ++this.count;
+    }
+
+    /**
+     * @see Countable#getCount()
+     * @return Avancée du joueur sous forme de nombre entier.
+     */
+    @Override
+    public final int getCount() {
+        return this.count;
     }
 }

@@ -12,7 +12,7 @@ public interface Countable {
     int getCount();
 
     /**
-     * Obtienir un montant de l'objectif requis
+     * Obtienir un montant de l'objectif requis.
      * @return Le montant de l'objectif requis.
      */
     int getAmount();

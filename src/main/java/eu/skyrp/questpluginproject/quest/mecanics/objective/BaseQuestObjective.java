@@ -35,8 +35,8 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
     }
 
     /**
-     * Réagit lorsque l'événement est appelé
-     * @param event event appelé
+     * Réagit lorsque l'événement de type T est déclenché.
+     * @param event L'event déclenché.
      */
     public abstract void onEventTriggered(T event);
 
