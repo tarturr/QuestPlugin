@@ -1,23 +1,29 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all;
 
-import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
+import eu.skyrp.questpluginproject.quest.mecanics.objective.cache.BaseBlockQuestObjective;
 import lombok.Builder;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class PlaceQuestObjective extends BaseCountableQuestObjective<BlockPlaceEvent, Block> {
+public class PlaceQuestObjective extends BaseBlockQuestObjective<BlockPlaceEvent> {
 
     @Builder
-    public PlaceQuestObjective(String id, UUID player, Block target, int toReach) {
-        super(id, player, target, toReach);
+    public PlaceQuestObjective(String id, UUID player, String targetId, int toReach, JavaPlugin plugin) {
+        super(id, player, targetId, toReach, plugin);
     }
 
     @Override
     @EventHandler
     public void onEventTriggered(BlockPlaceEvent event) {
-        // TODO : A faire
+        super.onEventTriggered(event);
+    }
+
+    @Override
+    protected Player getEventPlayer(BlockPlaceEvent event) {
+        return event.getPlayer();
     }
 }
