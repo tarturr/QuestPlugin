@@ -3,6 +3,7 @@ package eu.skyrp.questpluginproject.quest.mecanics.objective.cache;
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomStack;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -49,7 +50,6 @@ public abstract class BaseItemQuestObjective<T extends Event> extends BaseCounta
         meta.getPersistentDataContainer().set(this.playerItems, PersistentDataType.BYTE_ARRAY, elem.serializeAsBytes());
     }
 
-    // TODO: Ajouter la possibilité d'un CustomItemStack (SlimeFun)
     private static ItemStack getItemById(String targetId) {
         if (!targetId.contains(":")) {
             return new ItemStack(Material.valueOf(targetId.toUpperCase()));
@@ -61,6 +61,9 @@ public abstract class BaseItemQuestObjective<T extends Event> extends BaseCounta
 
         if (prefix.equalsIgnoreCase("ia") || prefix.equalsIgnoreCase("itemsadder")) {
             return CustomBlock.getInstance(item).getItemStack();
+        } else if (prefix.equalsIgnoreCase("sf") || prefix.equalsIgnoreCase("slimefun")) {
+            SlimefunItem slimefunItem = SlimefunItem.getById(item);
+            return slimefunItem != null ? slimefunItem.getItem() : null;
         } else {
             throw new IllegalArgumentException("The \"" + prefix + "\" item is not recognized by the plugin. " +
                     "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder.");
