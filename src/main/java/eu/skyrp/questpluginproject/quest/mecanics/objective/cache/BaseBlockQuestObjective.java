@@ -35,11 +35,6 @@ public abstract class BaseBlockQuestObjective<T extends BlockEvent> extends Base
         Player player = super.player();
         Block block = event.getBlock();
 
-        if (CustomBlock.byAlreadyPlaced(block) == null)
-            this.onBlockTriggered(block, player);
-    }
-
-    protected void onBlockTriggered(Block block, Player player) {
         player.sendMessage("Triggered");
 
         /*

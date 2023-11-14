@@ -1,11 +1,9 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all;
 
-import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
+import eu.skyrp.questpluginproject.api.events.BlockBreakEvent;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.cache.BaseBlockQuestObjective;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
@@ -26,14 +24,6 @@ public class BreakQuestObjective extends BaseBlockQuestObjective<BlockBreakEvent
     @EventHandler
     public void onEventTriggered(BlockBreakEvent event) {
         super.onEventTriggered(event);
-    }
-
-    @EventHandler
-    public void onCustomBlockBreak(CustomBlockBreakEvent event) {
-        final Player player = event.getPlayer();
-        final Block block = event.getBlock();
-
-        this.onBlockTriggered(block, player);
     }
 
     // TODO : Faire en sorte qu'il puisse le faire aussi avec les CustomBlockBreakEvent de ItemsAdder
