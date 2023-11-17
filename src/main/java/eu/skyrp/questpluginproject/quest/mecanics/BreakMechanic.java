@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.mecanics;
 
-import eu.skyrp.questpluginproject.quest.mecanics.objective.all.BreakQuestObjective;
+import eu.skyrp.questpluginproject.quest.mecanics.objective.all.vanilla.BreakQuestObjective;
 import lombok.Builder;
 import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;
