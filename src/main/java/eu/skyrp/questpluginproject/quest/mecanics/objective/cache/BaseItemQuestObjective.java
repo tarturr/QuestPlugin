@@ -1,10 +1,6 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.cache;
 
-import dev.lone.itemsadder.api.CustomBlock;
-import dev.lone.itemsadder.api.CustomStack;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public abstract class BaseItemQuestObjective<T extends Event> extends BaseCountableQuestObjective<T, ItemStack> implements Cachable<ItemStack> {
+public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseCountableQuestObjective<T, U> implements Cachable<ItemStack> {
 
     private final NamespacedKey playerItems;
 
@@ -24,12 +20,12 @@ public abstract class BaseItemQuestObjective<T extends Event> extends BaseCounta
      *
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
-     * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
+     * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseItemQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, getItemById(targetId), amount);
+    public BaseItemQuestObjective(String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
+        super(id, playerUUID, target, amount);
         this.playerItems = new NamespacedKey(plugin, super.playerUUID().toString());
     }
 
@@ -49,21 +45,20 @@ public abstract class BaseItemQuestObjective<T extends Event> extends BaseCounta
         meta.getPersistentDataContainer().set(this.playerItems, PersistentDataType.BYTE_ARRAY, elem.serializeAsBytes());
     }
 
-    // TODO: Ajouter la possibilité d'un CustomItemStack (SlimeFun)
-    private static ItemStack getItemById(String targetId) {
-        if (!targetId.contains(":")) {
-            return new ItemStack(Material.valueOf(targetId.toUpperCase()));
-        }
-
-        String[] parts = targetId.split(":");
-        String prefix = parts[0];
-        String item   = parts[1];
-
-        if (prefix.equalsIgnoreCase("ia") || prefix.equalsIgnoreCase("itemsadder")) {
-            return CustomBlock.getInstance(item).getItemStack();
-        } else {
-            throw new IllegalArgumentException("The \"" + prefix + "\" item is not recognized by the plugin. " +
-                    "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder.");
-        }
-    }
+//    private static ItemStack getItemById(String targetId) {
+//        if (!targetId.contains(":")) {
+//            return new ItemStack(Material.valueOf(targetId.toUpperCase()));
+//        }
+//
+//        String[] parts = targetId.split(":");
+//        String prefix = parts[0];
+//        String item   = parts[1];
+//
+//        if (prefix.equalsIgnoreCase("ia") || prefix.equalsIgnoreCase("itemsadder")) {
+//            return CustomBlock.getInstance(item).getItemStack();
+//        } else {
+//            throw new IllegalArgumentException("The \"" + prefix + "\" item is not recognized by the plugin. " +
+//                    "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder.");
+//        }
+//    }
 }
