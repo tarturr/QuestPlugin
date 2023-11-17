@@ -4,7 +4,6 @@ import eu.skyrp.questpluginproject.quest.mecanics.objective.cache.BaseBlockQuest
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,7 +26,6 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
     }
 
     @Override
-    @EventHandler
     public void onEventTriggered(T event) {
         Player player = super.player();
         Block block = event.getBlock();

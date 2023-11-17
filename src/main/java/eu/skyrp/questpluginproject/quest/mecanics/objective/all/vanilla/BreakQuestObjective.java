@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all.vanilla;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,6 +17,12 @@ public class BreakQuestObjective extends BaseVanillaBlockQuestObjective<BlockBre
      */
     public BreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
+    }
+
+    @Override
+    @EventHandler
+    public void onEventTriggered(BlockBreakEvent event) {
+        super.onEventTriggered(event);
     }
 
     @Override
