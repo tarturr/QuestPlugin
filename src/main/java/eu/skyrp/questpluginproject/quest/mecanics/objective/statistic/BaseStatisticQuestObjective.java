@@ -32,7 +32,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
     public BaseStatisticQuestObjective(String id, UUID playerUUID, Statistic type, T target, int amount) {
         super(id, playerUUID, target);
         this.type = type;
-        this.amount = amount + this.getCount() - 1;
+        this.amount = amount + this.getCount();
     }
 
     /**

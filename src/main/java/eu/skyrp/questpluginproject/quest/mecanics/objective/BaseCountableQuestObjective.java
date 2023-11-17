@@ -22,7 +22,7 @@ public abstract class BaseCountableQuestObjective<T extends Event, U> extends Ba
      */
     public BaseCountableQuestObjective(String id, UUID playerUUID, U target, int amount) {
         super(id, playerUUID, target);
-        this.amount = amount > 0 ? amount - 1 : 0;
+        this.amount = amount;
         this.count = 0;
     }
 
