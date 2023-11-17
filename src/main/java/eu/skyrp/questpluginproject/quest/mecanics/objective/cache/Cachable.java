@@ -1,7 +1,6 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.cache;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Représente un élément (souvent {@link org.bukkit.block.Block} ou {@link org.bukkit.inventory.ItemStack}) avec lequel un joueur a déjà eu des interactions.
