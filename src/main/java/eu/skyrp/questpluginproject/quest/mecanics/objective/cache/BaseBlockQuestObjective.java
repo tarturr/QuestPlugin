@@ -7,70 +7,70 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public abstract class BaseBlockQuestObjective<T extends BlockEvent> extends BaseCountableQuestObjective<T, ItemStack> implements Cachable<Block> {
+public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseCountableQuestObjective<T, U> implements Cachable<Block> {
 
     private final JavaPlugin plugin;
 
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
-     * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
+     * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseBlockQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, getBlockById(targetId), amount);
+    public BaseBlockQuestObjective(String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
+        super(id, playerUUID, target, amount);
         this.plugin = plugin;
     }
 
-    @Override
-    public void onEventTriggered(T event) {
-        Player player = super.player();
-        Block block = event.getBlock();
+//    @Override
+//    public void onEventTriggered(T event) {
+//        Player player = super.player();
+//        Block block = event.getBlock();
+//
+//        player.sendMessage("Triggered");
+//
+//        /*
+//         TODO: Modifier la classe pour prendre soit un Material, soit un CustomBlock de ItemsAdder, soit le CustomBlock
+//           de SlimeFun en U de BaseCountableQuestObjective<T, U>
+//         */
+//        if (!(isTarget(block) && !this.hasElemPlayer(player, block))) {
+//            return;
+//        }
+//
+//        player.sendMessage("Tests passed");
+//
+//        this.addPlayerToElem(player, block);
+//        super.incrementCount();
+//
+//        if (super.getCount() >= super.getAmount()) {
+//            player.sendMessage("§a[Quests] Quête terminée !");
+//        }
+//    }
 
-        player.sendMessage("Triggered");
-
-        /*
-         TODO: Modifier la classe pour prendre soit un Material, soit un CustomBlock de ItemsAdder, soit le CustomBlock
-           de SlimeFun en U de BaseCountableQuestObjective<T, U>
-         */
-        if (!(isTarget(block) && !this.hasElemPlayer(player, block))) {
-            return;
-        }
-
-        player.sendMessage("Tests passed");
-
-        this.addPlayerToElem(player, block);
-        super.incrementCount();
-
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
-    }
-
-    /**
-     * Check si le block correspond a la bonne target
-     * @param block block ciblé
-     * @return true Si la target et bloc corresponde
-     */
-    private boolean isTarget(Block block) {
-        SlimefunItem slimefunItem = BlockStorage.check(block);
-        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
-
-        if (slimefunItem != null) {
-            return slimefunItem.getItem().isSimilar(super.target);
-        } else if (customBlock != null) {
-            return customBlock.getItemStack().isSimilar(super.target);
-        }
-        return block.getType() == super.target.getType();
-    }
+//    /**
+//     * Check si le block correspond a la bonne target
+//     * @param block block ciblé
+//     * @return true Si la target et bloc corresponde
+//     */
+//    private boolean isTarget(Block block) {
+//        SlimefunItem slimefunItem = BlockStorage.check(block);
+//        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
+//
+//        if (slimefunItem != null) {
+//            return slimefunItem.getItem().isSimilar(super.target);
+//        } else if (customBlock != null) {
+//            return customBlock.getItemStack().isSimilar(super.target);
+//        }
+//        return block.getType() == super.target.getType();
+//    }
 
     protected abstract Player getEventPlayer(T event);
 
