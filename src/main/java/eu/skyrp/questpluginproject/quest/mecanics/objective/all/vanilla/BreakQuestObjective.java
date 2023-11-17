@@ -1,14 +1,12 @@
-package eu.skyrp.questpluginproject.quest.mecanics.objective.all;
+package eu.skyrp.questpluginproject.quest.mecanics.objective.all.vanilla;
 
-import eu.skyrp.questpluginproject.quest.mecanics.objective.cache.BaseBlockQuestObjective;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class BreakQuestObjective extends BaseBlockQuestObjective<BlockBreakEvent> {
+public class BreakQuestObjective extends BaseVanillaBlockQuestObjective<BlockBreakEvent> {
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
@@ -18,12 +16,6 @@ public class BreakQuestObjective extends BaseBlockQuestObjective<BlockBreakEvent
      */
     public BreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
-    }
-
-    @Override
-    @EventHandler
-    public void onEventTriggered(BlockBreakEvent event) {
-        super.onEventTriggered(event);
     }
 
     @Override
