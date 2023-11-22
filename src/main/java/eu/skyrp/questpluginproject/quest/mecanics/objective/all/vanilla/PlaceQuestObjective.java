@@ -11,8 +11,8 @@ import java.util.UUID;
 public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPlaceEvent> {
 
     @Builder
-    public PlaceQuestObjective(String id, UUID player, String targetId, int amount, JavaPlugin plugin) {
-        super(id, player, targetId, amount, plugin);
+    public PlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+        super(id, playerUUID, targetId, amount, plugin);
     }
 
     @Override
