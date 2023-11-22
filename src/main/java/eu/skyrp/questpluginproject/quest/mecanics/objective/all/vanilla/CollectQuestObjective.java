@@ -24,7 +24,7 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
      */
     @Builder
     public CollectQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, Material.valueOf(targetId), amount, plugin);
+        super(id, playerUUID, Material.valueOf(targetId.toUpperCase()), amount, plugin);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");
@@ -36,7 +36,7 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
     public void onEventTriggered(EntityPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
 
-        if (!(event.getEntity() instanceof Player player && player == super.player() && item.getType() == super.target() && super.hasElemPlayer(player, item))) {
+        if (!(event.getEntity() instanceof Player player && player == super.player() && item.getType() == super.target() && !super.hasElemPlayer(player, item))) {
             return;
         }
 
