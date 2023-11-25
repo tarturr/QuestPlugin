@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all.other.itemsadder;
 
 import dev.lone.itemsadder.api.CustomStack;
-import eu.skyrp.questpluginproject.quest.mecanics.objective.all.other.CustomItemStackFinder;
+import eu.skyrp.questpluginproject.quest.mecanics.objective.all.other.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.cache.BaseItemQuestObjective;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickupItemEvent, ItemStack> {
+public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickupItemEvent, CustomStack> {
     /**
      * Constructeur de la classe ItemStatisticQuestObjective.
      *
@@ -25,12 +25,12 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super(
                 id,
                 playerUUID,
-                CustomItemStackFinder.getItemById(
+                CustomObjectFinder.getItemById(
                         targetId,
                         "ItemsAdder",
                         "ia",
                         CustomStack::isInRegistry,
-                        (item) -> CustomStack.getInstance(item).getItemStack()
+                        CustomStack::getInstance
                 ),
                 amount,
                 plugin
@@ -43,7 +43,7 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         ItemStack item = event.getItem().getItemStack();
         CustomStack custom = CustomStack.byItemStack(item);
 
-        if (!(event.getEntity() instanceof Player player && player == super.player() && custom != null && item.isSimilar(super.target()) && !super.hasElemPlayer(player, item))) {
+        if (!(event.getEntity() instanceof Player player && player == super.player() && custom != null && custom.equals(super.target()) && !super.hasElemPlayer(player, item))) {
             return;
         }
 

@@ -34,7 +34,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
 
         player.sendMessage("Triggered");
 
-        if (!(CustomBlock.byAlreadyPlaced(block).getItemStack().isSimilar(super.target()) && !this.hasElemPlayer(player, block))) {
+        if (!(CustomBlock.byAlreadyPlaced(block).equals(super.target()) && !this.hasElemPlayer(player, block))) {
             return;
         }
 
