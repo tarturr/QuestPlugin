@@ -25,7 +25,7 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super(
                 id,
                 playerUUID,
-                CustomObjectFinder.getItemById(
+                CustomObjectFinder.getById(
                         targetId,
                         "ItemsAdder",
                         "ia",

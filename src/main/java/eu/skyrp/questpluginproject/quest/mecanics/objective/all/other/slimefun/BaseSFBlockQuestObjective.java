@@ -23,7 +23,7 @@ public abstract class BaseSFBlockQuestObjective<T extends BlockEvent> extends Ba
         super(
                 id,
                 playerUUID,
-                CustomObjectFinder.getItemById(
+                CustomObjectFinder.getById(
                         targetId,
                         "SlimeFun",
                         "sf",

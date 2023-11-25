@@ -20,7 +20,7 @@ public abstract class BaseIABlockQuestObjective<T extends PlayerEvent> extends B
         super(
                 id,
                 playerUUID,
-                CustomObjectFinder.getItemById(
+                CustomObjectFinder.getById(
                         targetId,
                         "ItemsAdder",
                         "ia",

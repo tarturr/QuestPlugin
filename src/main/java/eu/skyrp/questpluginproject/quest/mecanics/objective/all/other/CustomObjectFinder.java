@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 public class CustomObjectFinder {
 
-    public static <T> T getItemById(String targetId, String apiName, String shortPrefix, Predicate<String> isInRegistry, Function<String, T> getItem) {
+    public static <T> T getById(String targetId, String apiName, String shortPrefix, Predicate<String> isInRegistry, Function<String, T> getItem) {
         if (!targetId.contains(":")) {
             throw new MalformedCustomItemIDException(apiName, targetId, shortPrefix);
         }

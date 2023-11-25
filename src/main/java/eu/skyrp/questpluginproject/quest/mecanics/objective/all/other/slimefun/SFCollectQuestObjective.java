@@ -25,7 +25,7 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super(
                 id,
                 playerUUID,
-                CustomObjectFinder.getItemById(
+                CustomObjectFinder.getById(
                         targetId,
                         "SlimeFun",
                         "sf",
