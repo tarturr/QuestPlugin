@@ -1,9 +1,6 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.cache;
 
-import dev.lone.itemsadder.api.CustomBlock;
 import eu.skyrp.questpluginproject.quest.mecanics.objective.BaseCountableQuestObjective;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -46,25 +43,5 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseCou
         }
 
         meta.getPersistentDataContainer().set(this.playerItems, PersistentDataType.BYTE_ARRAY, elem.serializeAsBytes());
-    }
-
-    private static ItemStack getItemById(String targetId) {
-        if (!targetId.contains(":")) {
-            return new ItemStack(Material.valueOf(targetId.toUpperCase()));
-        }
-
-        String[] parts = targetId.split(":");
-        String prefix = parts[0];
-        String item   = parts[1];
-
-        if (prefix.equalsIgnoreCase("ia") || prefix.equalsIgnoreCase("itemsadder")) {
-            return CustomBlock.getInstance(item).getItemStack();
-        } else if (prefix.equalsIgnoreCase("sf") || prefix.equalsIgnoreCase("slimefun")) {
-            SlimefunItem slimefunItem = SlimefunItem.getById(item);
-            return slimefunItem != null ? slimefunItem.getItem() : null;
-        } else {
-            throw new IllegalArgumentException("The \"" + prefix + "\" item is not recognized by the plugin. " +
-                    "Please use \"ia:\"/\"itemsadder:\" prefix for ItemsAdder.");
-        }
     }
 }
