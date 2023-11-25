@@ -1,13 +1,11 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all.other;
 
-import org.bukkit.inventory.ItemStack;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class CustomItemStackFinder {
+public class CustomObjectFinder {
 
-    public static ItemStack getItemById(String targetId, String apiName, String shortPrefix, Predicate<String> isInRegistry, Function<String, ItemStack> getItem) {
+    public static <T> T getItemById(String targetId, String apiName, String shortPrefix, Predicate<String> isInRegistry, Function<String, T> getItem) {
         if (!targetId.contains(":")) {
             throw new MalformedCustomItemIDException(apiName, targetId, shortPrefix);
         }
