@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.lib.database.connection;
 
-import eu.skyrp.questpluginproject.loaders.DatabaseConnectionLoader;
+import eu.skyrp.questpluginproject.loader.DatabaseConnectionLoader;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 

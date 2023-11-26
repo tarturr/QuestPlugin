@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.loaders;
+package eu.skyrp.questpluginproject.loader;
 
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.lib.database.connection.DatabaseConnection;
@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class DatabaseConnectionLoader {
 
-    private final JavaPlugin plugin;
+    private final String pluginName;
     private final FileConfiguration config;
     private final String rootDatabasePath;
 
@@ -18,7 +18,7 @@ public class DatabaseConnectionLoader {
     private BaseDatabaseConnection databaseConnection;
 
     public DatabaseConnectionLoader(JavaPlugin plugin, String rootDatabasePath, String databaseName) {
-        this.plugin = plugin;
+        this.pluginName = plugin.getName();
         this.config = plugin.getConfig();
         this.rootDatabasePath = rootDatabasePath;
 
@@ -35,7 +35,7 @@ public class DatabaseConnectionLoader {
     }
 
     private void connectToLocalDatabase(String databaseName) {
-        String filePath = this.config.getCurrentPath() + "plugins/" + this.plugin.getName() + "/" +
+        String filePath = this.config.getCurrentPath() + "plugins/" + this.pluginName + "/" +
                 this.config.getString(this.rootDatabasePath + ".sqlite_path", LocalDatabaseConnection.SQLITE_PATH);
         this.databaseConnection = new LocalDatabaseConnection(databaseName, filePath);
 
