@@ -1,13 +1,16 @@
 package eu.skyrp.questpluginproject.quest.mecanics.objective.all.other.slimefun;
 
+import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<BlockPlaceEvent> {
+public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockPlaceEvent> {
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
@@ -21,12 +24,29 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<BlockPlaceE
 
     @Override
     @EventHandler
-    public void onEventTriggered(BlockPlaceEvent event) {
-        super.onEventTriggered(event);
+    public void onEventTriggered(SlimefunBlockPlaceEvent event) {
+        Player player = super.player();
+        Block block = event.getBlockPlaced();
+        SlimefunItem slimefunBlock = BlockStorage.check(block);
+
+        player.sendMessage("Triggered");
+
+        if (!(slimefunBlock != null && slimefunBlock.equals(super.target()) && !this.hasElemPlayer(player, block))) {
+            return;
+        }
+
+        player.sendMessage("Tests passed");
+
+        this.addPlayerToElem(player, block);
+        super.incrementCount();
+
+        if (super.getCount() >= super.getAmount()) {
+            player.sendMessage("§a[Quests] Quête terminée !");
+        }
     }
 
     @Override
-    protected Player getEventPlayer(BlockPlaceEvent event) {
+    protected Player getEventPlayer(SlimefunBlockPlaceEvent event) {
         return event.getPlayer();
     }
 }
