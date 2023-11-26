@@ -1,6 +1,6 @@
-package eu.skyrp.questpluginproject.quest.other.slimefun.objective;
+package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
+import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockBreakEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.block.Block;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockPlaceEvent> {
+public class SFBreakQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockBreakEvent> {
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
@@ -18,15 +18,15 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public SFPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+    public SFBreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
     }
 
     @Override
     @EventHandler
-    public void onEventTriggered(SlimefunBlockPlaceEvent event) {
+    public void onEventTriggered(SlimefunBlockBreakEvent event) {
         Player player = super.player();
-        Block block = event.getBlockPlaced();
+        Block block = event.getBlockBroken();
         SlimefunItem slimefunBlock = BlockStorage.check(block);
 
         player.sendMessage("Triggered");
@@ -46,7 +46,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
     }
 
     @Override
-    protected Player getEventPlayer(SlimefunBlockPlaceEvent event) {
+    protected Player getEventPlayer(SlimefunBlockBreakEvent event) {
         return event.getPlayer();
     }
 }

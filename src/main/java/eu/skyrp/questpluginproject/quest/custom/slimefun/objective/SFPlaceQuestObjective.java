@@ -1,7 +1,8 @@
-package eu.skyrp.questpluginproject.quest.other.itemsadder.objective;
+package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import dev.lone.itemsadder.api.CustomBlock;
-import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
+import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlockPlaceEvent> {
+public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockPlaceEvent> {
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
@@ -17,24 +18,20 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public IAPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+    public SFPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
     }
 
-    /**
-     * Réagit lorsque l'événement de type T est déclenché.
-     *
-     * @param event L'event déclenché.
-     */
     @Override
     @EventHandler
-    public void onEventTriggered(CustomBlockPlaceEvent event) {
+    public void onEventTriggered(SlimefunBlockPlaceEvent event) {
         Player player = super.player();
-        Block block = event.getBlock();
+        Block block = event.getBlockPlaced();
+        SlimefunItem slimefunBlock = BlockStorage.check(block);
 
         player.sendMessage("Triggered");
 
-        if (!(CustomBlock.byAlreadyPlaced(block).equals(super.target()) && !this.hasElemPlayer(player, block))) {
+        if (!(slimefunBlock != null && slimefunBlock.equals(super.target()) && !this.hasElemPlayer(player, block))) {
             return;
         }
 
@@ -49,7 +46,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
     }
 
     @Override
-    protected Player getEventPlayer(CustomBlockPlaceEvent event) {
+    protected Player getEventPlayer(SlimefunBlockPlaceEvent event) {
         return event.getPlayer();
     }
 }

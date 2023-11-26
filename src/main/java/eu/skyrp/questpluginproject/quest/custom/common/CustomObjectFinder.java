@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.quest.other.common;
+package eu.skyrp.questpluginproject.quest.custom.common;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

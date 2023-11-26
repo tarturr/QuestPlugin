@@ -1,7 +1,7 @@
-package eu.skyrp.questpluginproject.quest.other.slimefun.mechanic;
+package eu.skyrp.questpluginproject.quest.custom.slimefun.mechanic;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
-import eu.skyrp.questpluginproject.quest.other.slimefun.objective.SFPlaceQuestObjective;
+import eu.skyrp.questpluginproject.quest.custom.slimefun.objective.SFPlaceQuestObjective;
 import lombok.Builder;
 import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;

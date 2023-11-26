@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.quest.other.common;
+package eu.skyrp.questpluginproject.quest.custom.common;
 
 public class MalformedCustomItemIDException extends IllegalArgumentException {
 

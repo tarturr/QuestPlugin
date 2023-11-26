@@ -1,7 +1,7 @@
-package eu.skyrp.questpluginproject.quest.other.itemsadder.objective;
+package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomBlock;
-import eu.skyrp.questpluginproject.quest.other.common.CustomObjectFinder;
+import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.plugin.java.JavaPlugin;

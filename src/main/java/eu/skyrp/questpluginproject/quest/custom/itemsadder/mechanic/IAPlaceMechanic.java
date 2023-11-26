@@ -1,7 +1,7 @@
-package eu.skyrp.questpluginproject.quest.other.itemsadder.mechanic;
+package eu.skyrp.questpluginproject.quest.custom.itemsadder.mechanic;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
-import eu.skyrp.questpluginproject.quest.other.itemsadder.objective.IAPlaceQuestObjective;
+import eu.skyrp.questpluginproject.quest.custom.itemsadder.objective.IAPlaceQuestObjective;
 import lombok.Builder;
 import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;

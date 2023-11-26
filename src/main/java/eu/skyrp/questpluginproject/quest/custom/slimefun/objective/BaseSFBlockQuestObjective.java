@@ -1,6 +1,6 @@
-package eu.skyrp.questpluginproject.quest.other.slimefun.objective;
+package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import eu.skyrp.questpluginproject.quest.other.common.CustomObjectFinder;
+import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.event.Event;

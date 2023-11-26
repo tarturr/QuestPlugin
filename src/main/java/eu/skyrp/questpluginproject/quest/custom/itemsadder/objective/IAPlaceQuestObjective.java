@@ -1,7 +1,7 @@
-package eu.skyrp.questpluginproject.quest.other.itemsadder.objective;
+package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomBlock;
-import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
+import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlockBreakEvent> {
+public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlockPlaceEvent> {
     /**
      * @param id         Id de la quête.
      * @param playerUUID UUID du joueur concerné par la quête.
@@ -17,7 +17,7 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public IABreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+    public IAPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
     }
 
@@ -28,7 +28,7 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      */
     @Override
     @EventHandler
-    public void onEventTriggered(CustomBlockBreakEvent event) {
+    public void onEventTriggered(CustomBlockPlaceEvent event) {
         Player player = super.player();
         Block block = event.getBlock();
 
@@ -49,7 +49,7 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
     }
 
     @Override
-    protected Player getEventPlayer(CustomBlockBreakEvent event) {
+    protected Player getEventPlayer(CustomBlockPlaceEvent event) {
         return event.getPlayer();
     }
 }
