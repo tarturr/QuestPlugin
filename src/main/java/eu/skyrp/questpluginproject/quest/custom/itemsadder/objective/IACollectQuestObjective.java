@@ -4,7 +4,6 @@ import dev.lone.itemsadder.api.CustomStack;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,20 +37,17 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
     }
 
     @Override
-    @EventHandler
-    public void onEventTriggered(EntityPickupItemEvent event) {
+    public boolean onEventTriggered(EntityPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
         CustomStack custom = CustomStack.byItemStack(item);
 
         if (!(event.getEntity() instanceof Player player && player == super.player() && custom != null && custom.equals(super.target()) && !super.hasElemPlayer(player, item))) {
-            return;
+            return false;
         }
 
         super.incrementCount();
         super.addPlayerToElem(player, item);
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 }

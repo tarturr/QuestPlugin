@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.objective.cache;
 
-import eu.skyrp.questpluginproject.quest.common.objective.BaseCountableQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseCountableQuestObjective<T, U> implements Cachable<Block> {
+public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<Block> {
 
     private final JavaPlugin plugin;
 

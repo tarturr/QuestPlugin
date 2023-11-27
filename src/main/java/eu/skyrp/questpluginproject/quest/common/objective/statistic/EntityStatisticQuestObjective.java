@@ -1,6 +1,5 @@
 package eu.skyrp.questpluginproject.quest.common.objective.statistic;
 
-import eu.skyrp.questpluginproject.quest.common.objective.Countable;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
@@ -28,7 +27,6 @@ public class EntityStatisticQuestObjective extends BaseStatisticQuestObjective<E
     /**
      * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
      * @return Avancée du joueur sous forme de nombre entier.
-     * @see Countable#getCount()
      */
     @Override
     public final int getCount() {

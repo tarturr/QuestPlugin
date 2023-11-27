@@ -26,14 +26,14 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
     }
 
     @Override
-    public void onEventTriggered(T event) {
+    public boolean onEventTriggered(T event) {
         Player player = super.player();
         Block block = event.getBlock();
 
         player.sendMessage("Triggered");
 
         if (!(block.getType() == super.target() && !this.hasElemPlayer(player, block))) {
-            return;
+            return false;
         }
 
         player.sendMessage("Tests passed");
@@ -41,8 +41,6 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 }

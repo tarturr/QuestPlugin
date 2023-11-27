@@ -1,11 +1,8 @@
 package eu.skyrp.questpluginproject.quest.common.objective.statistic;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
-import eu.skyrp.questpluginproject.quest.common.objective.Countable;
 import org.bukkit.Statistic;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 
 import java.util.UUID;
@@ -16,10 +13,9 @@ import java.util.UUID;
  * @param <T> Type de la cible incluse dans l'objectif de quête.
  * @see Statistic
  */
-public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<PlayerStatisticIncrementEvent, T> implements Countable {
+public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<PlayerStatisticIncrementEvent, T> {
 
     protected final Statistic type;
-    protected final int amount;
 
     /**
      * Constructeur de la classe BaseStatisticQuestObjective.
@@ -30,9 +26,9 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
      * @param amount Nombre requis pour atteindre le bout de la quête.
      */
     public BaseStatisticQuestObjective(String id, UUID playerUUID, Statistic type, T target, int amount) {
-        super(id, playerUUID, target);
+        super(id, playerUUID, target, amount);
         this.type = type;
-        this.amount = amount + this.getCount();
+        super.amount = amount + this.getCount();
     }
 
     /**
@@ -40,30 +36,13 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
      * @param event L'event déclenché.
      * @see BaseQuestObjective#onEventTriggered(Event)
      */
-    @EventHandler
     @Override
-    public void onEventTriggered(PlayerStatisticIncrementEvent event) {
+    public boolean onEventTriggered(PlayerStatisticIncrementEvent event) {
         if (!(event.getStatistic() == this.type && (event.getMaterial() == super.target || event.getEntityType() == super.target))) {
-            return;
+            return false;
         }
 
-        Player player = super.player();
-
-        if (!(event.getPlayer() == player && this.getCount() >= this.getAmount())) {
-            return;
-        }
-
-        player.sendMessage("§a[Quests] Quête terminée !");
-    }
-
-    /**
-     * Obtienir un montant de l'objectif requis.
-     * @return Le montant de l'objectif requis.
-     * @see Countable#getAmount()
-     */
-    @Override
-    public final int getAmount() {
-        return this.amount;
+        return event.getPlayer() == super.player() && this.getCount() >= this.getAmount();
     }
 
 }

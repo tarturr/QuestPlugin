@@ -25,17 +25,18 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * Réagit lorsque l'événement de type T est déclenché.
      *
      * @param event L'event déclenché.
+     * @return
      */
     @Override
     @EventHandler
-    public void onEventTriggered(CustomBlockPlaceEvent event) {
+    public boolean onEventTriggered(CustomBlockPlaceEvent event) {
         Player player = super.player();
         Block block = event.getBlock();
 
         player.sendMessage("Triggered");
 
         if (!(CustomBlock.byAlreadyPlaced(block).equals(super.target()) && !this.hasElemPlayer(player, block))) {
-            return;
+            return false;
         }
 
         player.sendMessage("Tests passed");
@@ -43,9 +44,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 
     @Override

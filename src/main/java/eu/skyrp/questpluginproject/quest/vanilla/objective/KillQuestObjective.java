@@ -10,8 +10,8 @@ import java.util.UUID;
 public class KillQuestObjective extends EntityStatisticQuestObjective {
 
     @Builder
-    public KillQuestObjective(String id, UUID player, EntityType targetType, int toReach) {
-        super(id, player, Statistic.PLAYER_KILLS, targetType, toReach);
+    public KillQuestObjective(String id, UUID player, EntityType targetType, int amount) {
+        super(id, player, Statistic.PLAYER_KILLS, targetType, amount);
     }
 
 }

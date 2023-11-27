@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.objective.cache;
 
-import eu.skyrp.questpluginproject.quest.common.objective.BaseCountableQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseCountableQuestObjective<T, U> implements Cachable<ItemStack> {
+public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<ItemStack> {
 
     private final NamespacedKey playerItems;
 

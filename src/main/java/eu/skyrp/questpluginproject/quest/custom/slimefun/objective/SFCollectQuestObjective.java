@@ -4,7 +4,6 @@ import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,22 +40,20 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      * Réagit lorsque l'événement de type T est déclenché.
      *
      * @param event L'event déclenché.
+     * @return
      */
     @Override
-    @EventHandler
-    public void onEventTriggered(EntityPickupItemEvent event) {
+    public boolean onEventTriggered(EntityPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
         SlimefunItem slimefunItem = SlimefunItem.getByItem(item);
 
         if (!(event.getEntity() instanceof Player player && player == super.player() && slimefunItem != null && slimefunItem.equals(super.target()) && !super.hasElemPlayer(player, item))) {
-            return;
+            return false;
         }
 
         super.incrementCount();
         super.addPlayerToElem(player, item);
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 }

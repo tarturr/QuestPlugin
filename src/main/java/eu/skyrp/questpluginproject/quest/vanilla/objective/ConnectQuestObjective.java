@@ -10,8 +10,8 @@ import java.util.UUID;
 public class ConnectQuestObjective extends PlayerStatisticQuestObjective {
 
     @Builder
-    public ConnectQuestObjective(String id, UUID player, Player target, int toReach) {
-        super(id, player, Statistic.PLAY_ONE_MINUTE, target, toReach);
+    public ConnectQuestObjective(String id, UUID player, Player target, int amount) {
+        super(id, player, Statistic.PLAY_ONE_MINUTE, target, amount);
     }
 
 }

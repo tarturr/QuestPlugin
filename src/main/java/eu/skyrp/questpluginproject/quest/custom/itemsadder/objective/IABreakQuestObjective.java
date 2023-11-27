@@ -4,7 +4,6 @@ import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
@@ -27,15 +26,14 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param event L'event déclenché.
      */
     @Override
-    @EventHandler
-    public void onEventTriggered(CustomBlockBreakEvent event) {
+    public boolean onEventTriggered(CustomBlockBreakEvent event) {
         Player player = super.player();
         Block block = event.getBlock();
 
         player.sendMessage("Triggered");
 
         if (!(CustomBlock.byAlreadyPlaced(block).equals(super.target()) && !this.hasElemPlayer(player, block))) {
-            return;
+            return false;
         }
 
         player.sendMessage("Tests passed");
@@ -43,9 +41,7 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 
     @Override

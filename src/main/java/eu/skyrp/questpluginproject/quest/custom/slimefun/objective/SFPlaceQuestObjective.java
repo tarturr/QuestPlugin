@@ -5,7 +5,6 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
@@ -23,8 +22,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
     }
 
     @Override
-    @EventHandler
-    public void onEventTriggered(SlimefunBlockPlaceEvent event) {
+    public boolean onEventTriggered(SlimefunBlockPlaceEvent event) {
         Player player = super.player();
         Block block = event.getBlockPlaced();
         SlimefunItem slimefunBlock = BlockStorage.check(block);
@@ -32,7 +30,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
         player.sendMessage("Triggered");
 
         if (!(slimefunBlock != null && slimefunBlock.equals(super.target()) && !this.hasElemPlayer(player, block))) {
-            return;
+            return false;
         }
 
         player.sendMessage("Tests passed");
@@ -40,9 +38,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 
     @Override

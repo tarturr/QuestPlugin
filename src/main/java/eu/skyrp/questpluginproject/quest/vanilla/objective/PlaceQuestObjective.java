@@ -2,7 +2,6 @@ package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import lombok.Builder;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,12 +12,6 @@ public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPla
     @Builder
     public PlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(id, playerUUID, targetId, amount, plugin);
-    }
-
-    @Override
-    @EventHandler
-    public void onEventTriggered(BlockPlaceEvent event) {
-        super.onEventTriggered(event);
     }
 
     @Override

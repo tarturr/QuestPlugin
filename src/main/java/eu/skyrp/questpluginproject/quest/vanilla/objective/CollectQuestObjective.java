@@ -4,7 +4,6 @@ import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObj
 import lombok.Builder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,19 +31,16 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
     }
 
     @Override
-    @EventHandler
-    public void onEventTriggered(EntityPickupItemEvent event) {
+    public boolean onEventTriggered(EntityPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
 
         if (!(event.getEntity() instanceof Player player && player == super.player() && item.getType() == super.target() && !super.hasElemPlayer(player, item))) {
-            return;
+            return false;
         }
 
         super.incrementCount();
         super.addPlayerToElem(player, item);
 
-        if (super.getCount() >= super.getAmount()) {
-            player.sendMessage("§a[Quests] Quête terminée !");
-        }
+        return super.getCount() >= super.getAmount();
     }
 }
