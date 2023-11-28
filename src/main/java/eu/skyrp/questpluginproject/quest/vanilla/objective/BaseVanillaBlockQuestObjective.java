@@ -17,8 +17,8 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseVanillaBlockQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, Material.valueOf(targetId.toUpperCase()), amount, plugin);
+    public BaseVanillaBlockQuestObjective(Class<T> eventType, String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+        super(eventType, id, playerUUID, Material.valueOf(targetId.toUpperCase()), amount, plugin);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");

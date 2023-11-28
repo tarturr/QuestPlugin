@@ -18,7 +18,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
      * @param plugin     Instance de la classe principale du plugin.
      */
     public SFPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, targetId, amount, plugin);
+        super(SlimefunBlockPlaceEvent.class, id, playerUUID, targetId, amount, plugin);
     }
 
     @Override

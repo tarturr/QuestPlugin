@@ -11,7 +11,7 @@ public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPla
 
     @Builder
     public PlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, targetId, amount, plugin);
+        super(BlockPlaceEvent.class, id, playerUUID, targetId, amount, plugin);
     }
 
     @Override

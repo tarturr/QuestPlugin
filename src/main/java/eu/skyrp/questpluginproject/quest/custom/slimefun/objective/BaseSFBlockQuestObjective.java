@@ -16,8 +16,9 @@ public abstract class BaseSFBlockQuestObjective<T extends Event> extends BaseBlo
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseSFBlockQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+    public BaseSFBlockQuestObjective(Class<T> eventType, String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(
+                eventType,
                 id,
                 playerUUID,
                 CustomObjectFinder.getById(

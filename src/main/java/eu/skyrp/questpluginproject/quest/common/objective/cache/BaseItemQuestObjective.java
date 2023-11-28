@@ -24,8 +24,8 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQue
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseItemQuestObjective(String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, target, amount);
+    public BaseItemQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
+        super(eventType, id, playerUUID, target, amount);
         this.playerItems = new NamespacedKey(plugin, super.playerUUID().toString());
     }
 

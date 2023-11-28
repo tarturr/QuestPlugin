@@ -18,7 +18,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param plugin     Instance de la classe principale du plugin.
      */
     public IAPlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, targetId, amount, plugin);
+        super(CustomBlockPlaceEvent.class, id, playerUUID, targetId, amount, plugin);
     }
 
     /**

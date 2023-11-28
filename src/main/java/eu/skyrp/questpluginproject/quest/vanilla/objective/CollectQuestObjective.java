@@ -23,7 +23,7 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
      */
     @Builder
     public CollectQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, Material.valueOf(targetId.toUpperCase()), amount, plugin);
+        super(EntityPickupItemEvent.class, id, playerUUID, Material.valueOf(targetId.toUpperCase()), amount, plugin);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");

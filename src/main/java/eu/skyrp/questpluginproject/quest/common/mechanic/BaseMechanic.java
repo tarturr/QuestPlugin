@@ -4,6 +4,7 @@ import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.Accessors;
+import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeEvent;
@@ -31,7 +32,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
 
         this.objectives.forEach(objective -> {
             objective.endQuestSupport().addPropertyChangeListener(this);
-            main.getServer().getPluginManager().registerEvents(objective, main);
+            main.getServer().getPluginManager().registerEvent(objective.getEventType(), objective, EventPriority.NORMAL, objective, main);
         });
 
         this.mechanicEndSupport = new PropertyChangeSupport(this);

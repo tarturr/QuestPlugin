@@ -16,8 +16,9 @@ public abstract class BaseIABlockQuestObjective<T extends PlayerEvent> extends B
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseIABlockQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
+    public BaseIABlockQuestObjective(Class<T> eventType, String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(
+                eventType,
                 id,
                 playerUUID,
                 CustomObjectFinder.getById(

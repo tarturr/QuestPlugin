@@ -22,6 +22,7 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      */
     public IACollectQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(
+                EntityPickupItemEvent.class,
                 id,
                 playerUUID,
                 CustomObjectFinder.getById(

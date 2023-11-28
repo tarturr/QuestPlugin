@@ -20,8 +20,8 @@ public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQu
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseBlockQuestObjective(String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, target, amount);
+    public BaseBlockQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
+        super(eventType, id, playerUUID, target, amount);
         this.plugin = plugin;
     }
 

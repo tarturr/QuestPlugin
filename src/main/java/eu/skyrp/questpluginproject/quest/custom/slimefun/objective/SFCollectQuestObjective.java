@@ -22,6 +22,7 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      */
     public SFCollectQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
         super(
+                EntityPickupItemEvent.class,
                 id,
                 playerUUID,
                 CustomObjectFinder.getById(

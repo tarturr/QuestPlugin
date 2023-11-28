@@ -15,7 +15,7 @@ public class BreakQuestObjective extends BaseVanillaBlockQuestObjective<BlockBre
      * @param plugin     Instance de la classe principale du plugin.
      */
     public BreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(id, playerUUID, targetId, amount, plugin);
+        super(BlockBreakEvent.class, id, playerUUID, targetId, amount, plugin);
     }
 
     @Override

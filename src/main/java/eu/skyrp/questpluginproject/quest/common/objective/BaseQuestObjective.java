@@ -5,8 +5,11 @@ import lombok.experimental.Accessors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.EventExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.beans.PropertyChangeSupport;
 import java.util.UUID;
@@ -18,7 +21,9 @@ import java.util.UUID;
  */
 @Getter
 @Accessors(fluent = true)
-public abstract class BaseQuestObjective<T extends Event, U> implements Listener {
+public abstract class BaseQuestObjective<T extends Event, U> implements Listener, EventExecutor {
+
+    private final Class<T> eventType;
 
     protected final String id;
     protected final UUID playerUUID;
@@ -35,7 +40,9 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
      * @param playerUUID UUID du joueur concerné par la quête.
      * @param target Objet inclus dans l'objectif de quête.
      */
-    public BaseQuestObjective(String id, UUID playerUUID, U target, int amount) {
+    public BaseQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount) {
+        this.eventType = eventType;
+
         this.id = id;
         this.playerUUID = playerUUID;
         this.target = target;
@@ -88,4 +95,12 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
         return this.count;
     }
 
+    @Override
+    public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
+        this.onEvent((T) event);
+    }
+
+    public Class<T> getEventType() {
+        return eventType;
+    }
 }

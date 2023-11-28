@@ -26,7 +26,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
      * @param amount Nombre requis pour atteindre le bout de la quête.
      */
     public BaseStatisticQuestObjective(String id, UUID playerUUID, Statistic type, T target, int amount) {
-        super(id, playerUUID, target, amount);
+        super(PlayerStatisticIncrementEvent.class, id, playerUUID, target, amount);
         this.type = type;
         super.amount = amount + this.getCount();
     }
