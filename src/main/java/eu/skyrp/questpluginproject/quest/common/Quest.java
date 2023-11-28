@@ -42,7 +42,12 @@ public abstract class Quest implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent event) {
         if (event.getPropertyName().equals("objectivesAllEnded")) {
             this.state = QuestState.ENDED;
-            this.onQuestEnds(Bukkit.getPlayer(this.mechanics.stream().map(BaseMechanic::playerUUID).findAny().orElseThrow()));
+            Player player = Bukkit.getPlayer(this.mechanics.stream().map(BaseMechanic::playerUUID).findAny().orElseThrow());
+
+            if (player != null) {
+                this.onQuestEnds(player);
+                this.reward.giveToPlayer(player);
+            }
         }
     }
 
