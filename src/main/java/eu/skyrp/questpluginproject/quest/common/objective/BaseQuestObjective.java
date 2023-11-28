@@ -55,7 +55,7 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
 
     @EventHandler
     public void onEvent(T event) {
-        if (this.onEventTriggered(event) && !this.hasEnded) {
+        if (!this.hasEnded && this.onEventTriggered(event)) {
             this.hasEnded = true;
             this.endQuestSupport.firePropertyChange("hasEnded", false, true);
         }
