@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest;
 
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
+import eu.skyrp.questpluginproject.quest.common.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
 import lombok.Builder;
@@ -13,7 +14,7 @@ public class EventQuest extends TransientQuest {
 
     @Builder
     public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, @Singular("mechanic") List<BaseMechanic<?>> mechanics, int durationInDays) {
-        super(id, name, lore, reward, mechanics, durationInDays);
+        super(QuestType.EVENT, id, name, lore, reward, mechanics, durationInDays);
     }
 
     @Override

@@ -16,19 +16,23 @@ public abstract class Quest implements PropertyChangeListener {
 
     private final String id;
     private QuestState state;
+
+    private final QuestType type;
     private final String name;
     private final List<String> lore;
     private final QuestReward reward;
-    private final List<BaseMechanic<?>> mechanics;
     private final Quest next;
+    private final List<BaseMechanic<?>> mechanics;
 
-    public Quest(String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics) {
-        this(id, name, lore, reward, mechanics, null);
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics) {
+        this(type, id, name, lore, reward, mechanics, null);
     }
 
-    public Quest(String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, Quest next) {
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, Quest next) {
         this.id = id;
         this.state = QuestState.NOT_STARTED;
+
+        this.type = type;
         this.name = name;
         this.lore = lore;
         this.reward = reward;
@@ -55,5 +59,9 @@ public abstract class Quest implements PropertyChangeListener {
 
     public boolean hasNext() {
         return this.next != null;
+    }
+
+    public QuestType getType() {
+        return type;
     }
 }

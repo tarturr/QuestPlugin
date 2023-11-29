@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest;
 
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
+import eu.skyrp.questpluginproject.quest.common.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
 import lombok.Builder;
@@ -12,7 +13,7 @@ public class WeeklyQuest extends TransientQuest {
 
     @Builder
     public WeeklyQuest(String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, int durationInDays) {
-        super(id, name, lore, reward, mechanics, durationInDays);
+        super(QuestType.WEEKLY, id, name, lore, reward, mechanics, durationInDays);
     }
 
     @Override
