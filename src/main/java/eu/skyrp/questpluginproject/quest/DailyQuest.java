@@ -13,8 +13,8 @@ import java.util.List;
 public class DailyQuest extends TransientQuest {
 
     @Builder
-    public DailyQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, @Singular("mechanic") List<BaseMechanic<?>> mechanics) {
-        super(QuestType.DAILY, id, name, lore, reward, mechanics, 1);
+    public DailyQuest(String id, String name, @Singular("descriptionLine") List<String> lore, @Singular("reward") List<QuestReward> rewards, @Singular("mechanic") List<BaseMechanic<?>> mechanics) {
+        super(QuestType.DAILY, id, name, lore, rewards, mechanics, 1);
     }
 
     @Override

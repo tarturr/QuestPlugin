@@ -5,6 +5,7 @@ import eu.skyrp.questpluginproject.quest.common.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
 import lombok.Builder;
+import lombok.Singular;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.List;
 public class WeeklyQuest extends TransientQuest {
 
     @Builder
-    public WeeklyQuest(String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, int durationInDays) {
-        super(QuestType.WEEKLY, id, name, lore, reward, mechanics, durationInDays);
+    public WeeklyQuest(String id, String name, List<String> lore, @Singular("reward") List<QuestReward> rewards, List<BaseMechanic<?>> mechanics, int durationInDays) {
+        super(QuestType.WEEKLY, id, name, lore, rewards, mechanics, durationInDays);
     }
 
     @Override

@@ -13,8 +13,8 @@ import java.util.List;
 public class EventQuest extends TransientQuest {
 
     @Builder
-    public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, @Singular("mechanic") List<BaseMechanic<?>> mechanics, int durationInDays) {
-        super(QuestType.EVENT, id, name, lore, reward, mechanics, durationInDays);
+    public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, @Singular("reward") List<QuestReward> rewards, @Singular("mechanic") List<BaseMechanic<?>> mechanics, int durationInDays) {
+        super(QuestType.EVENT, id, name, lore, rewards, mechanics, durationInDays);
     }
 
     @Override
