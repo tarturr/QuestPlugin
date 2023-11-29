@@ -1,7 +1,9 @@
 package eu.skyrp.questpluginproject.quest.common;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import java.util.List;
 public abstract class Quest implements PropertyChangeListener {
 
     private final String id;
+    @Setter(AccessLevel.PROTECTED)
     private QuestState state;
 
     private final QuestType type;
