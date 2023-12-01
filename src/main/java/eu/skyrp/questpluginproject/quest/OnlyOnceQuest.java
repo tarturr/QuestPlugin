@@ -13,8 +13,8 @@ import java.util.List;
 public class OnlyOnceQuest extends Quest {
 
     @Builder
-    public OnlyOnceQuest(String id, String name, @Singular("descriptionLine") List<String> lore, @Singular("reward") List<QuestReward> rewards, @Singular("mechanic") List<BaseMechanic<?>> mechanics) {
-        super(QuestType.ONLY_ONCE, id, name, lore, rewards, mechanics);
+    public OnlyOnceQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, @Singular("mechanic") List<BaseMechanic<?>> mechanics) {
+        super(QuestType.ONLY_ONCE, id, name, lore, reward, mechanics);
     }
 
     @Override

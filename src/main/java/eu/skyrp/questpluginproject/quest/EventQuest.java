@@ -16,8 +16,8 @@ public class EventQuest extends TransientQuest {
     private final Date start;
 
     @Builder
-    public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, @Singular("reward") List<QuestReward> rewards, @Singular("mechanic") List<BaseMechanic<?>> mechanics, Date start, int durationInDays) {
-        super(QuestType.EVENT, id, name, lore, rewards, mechanics, durationInDays);
+    public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, @Singular("mechanic") List<BaseMechanic<?>> mechanics, Date start, int durationInDays) {
+        super(QuestType.EVENT, id, name, lore, reward, mechanics, durationInDays);
         this.start = start;
     }
 
