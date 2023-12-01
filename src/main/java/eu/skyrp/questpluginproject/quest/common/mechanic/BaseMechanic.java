@@ -1,9 +1,11 @@
 package eu.skyrp.questpluginproject.quest.common.mechanic;
 
+import eu.skyrp.questpluginproject.quest.common.ConfigurationCreatable;
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.Accessors;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Accessors(fluent = true)
-public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implements PropertyChangeListener {
+public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implements PropertyChangeListener, ConfigurationCreatable<BaseMechanic<?>> {
 
     @Getter
     private final UUID playerUUID;
@@ -51,5 +53,10 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.mechanicEndSupport.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public BaseMechanic<?> createFromConfiguration(YamlConfiguration config) {
+        return null;
     }
 }

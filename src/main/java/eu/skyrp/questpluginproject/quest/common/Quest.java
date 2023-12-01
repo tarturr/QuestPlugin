@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.beans.PropertyChangeEvent;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Accessors(fluent = true)
-public abstract class Quest implements PropertyChangeListener {
+public abstract class Quest implements PropertyChangeListener, ConfigurationCreatable<Quest> {
 
     private final String id;
     @Setter(AccessLevel.PROTECTED)
@@ -23,22 +24,22 @@ public abstract class Quest implements PropertyChangeListener {
     private final QuestType type;
     private final String name;
     private final List<String> lore;
-    private final List<QuestReward> rewards;
+    private final QuestReward reward;
     private final Quest next;
     private final List<BaseMechanic<?>> mechanics;
 
-    public Quest(QuestType type, String id, String name, List<String> lore, List<QuestReward> rewards, List<BaseMechanic<?>> mechanics) {
-        this(type, id, name, lore, rewards, mechanics, null);
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics) {
+        this(type, id, name, lore, reward, mechanics, null);
     }
 
-    public Quest(QuestType type, String id, String name, List<String> lore, List<QuestReward> rewards, List<BaseMechanic<?>> mechanics, Quest next) {
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, Quest next) {
         this.id = id;
         this.state = QuestState.NOT_STARTED;
 
         this.type = type;
         this.name = name;
         this.lore = lore;
-        this.rewards = rewards;
+        this.reward = reward;
         this.mechanics = mechanics;
         this.next = next;
 
@@ -53,9 +54,14 @@ public abstract class Quest implements PropertyChangeListener {
 
             if (player != null) {
                 this.onQuestEnds(player);
-                this.rewards.forEach(reward -> reward.giveToPlayer(player));
+                this.reward.giveToPlayer(player);
             }
         }
+    }
+
+    @Override
+    public Quest createFromConfiguration(YamlConfiguration config) {
+        return null;
     }
 
     public abstract void onQuestEnds(Player player);

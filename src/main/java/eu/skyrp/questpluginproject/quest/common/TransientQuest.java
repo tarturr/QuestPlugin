@@ -14,8 +14,8 @@ public abstract class TransientQuest extends Quest {
 
     private final Date end;
 
-    public TransientQuest(QuestType type, String id, String name, List<String> lore, List<QuestReward> rewards, List<BaseMechanic<?>> mechanics, int durationInDays) {
-        super(type, id, name, lore, rewards, mechanics);
+    public TransientQuest(QuestType type, String id, String name, List<String> lore, QuestReward reward, List<BaseMechanic<?>> mechanics, int durationInDays) {
+        super(type, id, name, lore, reward, mechanics);
         this.end = new Date(System.currentTimeMillis() + (long) durationInDays * 24 * 3600 * 1000);
     }
 
