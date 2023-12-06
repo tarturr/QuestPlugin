@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Singular;
 import lombok.experimental.Accessors;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,19 +16,7 @@ import java.util.*;
 
 @Accessors(fluent = true)
 @Builder
-public class QuestReward implements ConfigurationCreatable<QuestReward> {
-
-    private Map<String, Integer> items;
-    private double experience;
-    private double money;
-    private List<String> commands;
-
-    public QuestReward(@Singular("item") Map<String, Integer> items, double experience, double money, @Singular("command") List<String> commands) {
-        this.items = items;
-        this.experience = experience;
-        this.money = money;
-        this.commands = commands;
-    }
+public record QuestReward(@Singular("item") Map<String, Integer> items, float experience, float money, @Singular("command") List<String> commands) {
 
     public void giveToPlayer(Player player) {
         Inventory inventory = player.getInventory();
@@ -51,8 +38,4 @@ public class QuestReward implements ConfigurationCreatable<QuestReward> {
         }
     }
 
-    @Override
-    public QuestReward createFromConfiguration(YamlConfiguration config) {
-        return null;
-    }
 }
