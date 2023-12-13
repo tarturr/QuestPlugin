@@ -2,10 +2,9 @@ package eu.skyrp.questpluginproject.quest.common.objective.statistic;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import org.bukkit.Statistic;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
-
-import java.util.UUID;
 
 
 /**
@@ -20,13 +19,12 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
     /**
      * Constructeur de la classe BaseStatisticQuestObjective.
      * @param id Id de la quête.
-     * @param playerUUID UUID du joueur concerné par la quête.
      * @param target Objet inclus dans l'objectif de quête.
      * @param type Type de Statistic à vérifier.
      * @param amount Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseStatisticQuestObjective(String id, UUID playerUUID, Statistic type, T target, int amount) {
-        super(PlayerStatisticIncrementEvent.class, id, playerUUID, target, amount);
+    public BaseStatisticQuestObjective(String id, Statistic type, T target, int amount) {
+        super(PlayerStatisticIncrementEvent.class, id, target, amount);
         this.type = type;
         super.amount = amount + this.getCount();
     }
@@ -34,6 +32,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
     /**
      * Réagit lorsque l'événement de type PlayerStatisticIncrementEvent est déclenché.
      * @param event L'event déclenché.
+     * @return true si l'event s'est correctement exécuté, false sinon.
      * @see BaseQuestObjective#onEventTriggered(Event)
      */
     @Override
@@ -42,7 +41,11 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
             return false;
         }
 
-        return event.getPlayer() == super.player() && this.getCount() >= this.getAmount();
+        return this.getCount(event.getPlayer()) >= this.getAmount();
+    }
+
+    public int getCount(Player player) {
+        return player.getStatistic(this.type) / 20;
     }
 
 }

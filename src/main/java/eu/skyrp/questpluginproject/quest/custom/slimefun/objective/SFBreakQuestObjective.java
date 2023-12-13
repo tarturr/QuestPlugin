@@ -7,23 +7,25 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public class SFBreakQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockBreakEvent> {
     /**
      * @param id         Id de la quête.
-     * @param playerUUID UUID du joueur concerné par la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public SFBreakQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(SlimefunBlockBreakEvent.class, id, playerUUID, targetId, amount, plugin);
+    public SFBreakQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
+        super(SlimefunBlockBreakEvent.class, id, targetId, amount, plugin);
     }
 
+    /**
+     * Réagit lorsque l'événement de type T est déclenché.
+     * @param event L'event déclenché.
+     * @return true si l'event s'est correctement exécuté, false sinon.
+     */
     @Override
     public boolean onEventTriggered(SlimefunBlockBreakEvent event) {
-        Player player = super.player();
+        Player player = this.getEventPlayer(event);
         Block block = event.getBlockBroken();
         SlimefunItem slimefunBlock = BlockStorage.check(block);
 

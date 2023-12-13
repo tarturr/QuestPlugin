@@ -7,13 +7,12 @@ import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SFBreakMechanic extends BaseMechanic<SFBreakQuestObjective> {
 
     @Builder
-    public SFBreakMechanic(JavaPlugin main, UUID playerUUID, @Singular("objective") List<SFBreakQuestObjective> objectives) {
-        super(main, playerUUID, objectives);
+    public SFBreakMechanic(JavaPlugin main, @Singular("objective") List<SFBreakQuestObjective> objectives) {
+        super(main, objectives);
     }
 
 }

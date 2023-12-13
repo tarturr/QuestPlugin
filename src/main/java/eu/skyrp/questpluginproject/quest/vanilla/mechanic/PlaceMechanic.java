@@ -12,8 +12,8 @@ import java.util.UUID;
 public class PlaceMechanic extends BaseMechanic<PlaceQuestObjective> {
 
     @Builder
-    public PlaceMechanic(JavaPlugin main, UUID playerUUID, @Singular("objective") List<PlaceQuestObjective> objectives) {
-        super(main, playerUUID, objectives);
+    public PlaceMechanic(JavaPlugin main, @Singular("objective") List<PlaceQuestObjective> objectives) {
+        super(main, objectives);
     }
 
 }

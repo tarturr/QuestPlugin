@@ -7,21 +7,18 @@ import org.bukkit.event.Event;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<Block> {
 
     private final JavaPlugin plugin;
 
     /**
      * @param id         Id de la quête.
-     * @param playerUUID UUID du joueur concerné par la quête.
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseBlockQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
-        super(eventType, id, playerUUID, target, amount);
+    public BaseBlockQuestObjective(Class<T> eventType, String id, U target, int amount, JavaPlugin plugin) {
+        super(eventType, id, target, amount);
         this.plugin = plugin;
     }
 

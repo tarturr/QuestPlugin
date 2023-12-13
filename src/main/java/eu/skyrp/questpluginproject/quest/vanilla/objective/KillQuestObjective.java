@@ -5,13 +5,11 @@ import lombok.Builder;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
-import java.util.UUID;
-
 public class KillQuestObjective extends EntityStatisticQuestObjective {
 
     @Builder
-    public KillQuestObjective(String id, UUID player, EntityType targetType, int amount) {
-        super(id, player, Statistic.PLAYER_KILLS, targetType, amount);
+    public KillQuestObjective(String id, EntityType targetType, int amount) {
+        super(id, Statistic.PLAYER_KILLS, targetType, amount);
     }
 
 }

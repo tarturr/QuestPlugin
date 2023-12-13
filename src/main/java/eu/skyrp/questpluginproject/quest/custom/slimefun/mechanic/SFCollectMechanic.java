@@ -7,13 +7,12 @@ import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SFCollectMechanic extends BaseMechanic<SFCollectQuestObjective> {
 
     @Builder
-    public SFCollectMechanic(JavaPlugin main, UUID playerUUID, @Singular("objective") List<SFCollectQuestObjective> objectives) {
-        super(main, playerUUID, objectives);
+    public SFCollectMechanic(JavaPlugin main, @Singular("objective") List<SFCollectQuestObjective> objectives) {
+        super(main, objectives);
     }
 
 }

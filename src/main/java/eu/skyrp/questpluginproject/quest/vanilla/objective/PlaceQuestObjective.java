@@ -5,13 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPlaceEvent> {
 
     @Builder
-    public PlaceQuestObjective(String id, UUID playerUUID, String targetId, int amount, JavaPlugin plugin) {
-        super(BlockPlaceEvent.class, id, playerUUID, targetId, amount, plugin);
+    public PlaceQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
+        super(BlockPlaceEvent.class, id, targetId, amount, plugin);
     }
 
     @Override

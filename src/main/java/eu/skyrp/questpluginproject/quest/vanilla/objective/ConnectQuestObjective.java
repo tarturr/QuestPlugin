@@ -5,13 +5,11 @@ import lombok.Builder;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class ConnectQuestObjective extends PlayerStatisticQuestObjective {
 
     @Builder
-    public ConnectQuestObjective(String id, UUID player, Player target, int amount) {
-        super(id, player, Statistic.PLAY_ONE_MINUTE, target, amount);
+    public ConnectQuestObjective(String id, Player target, int amount) {
+        super(id, Statistic.PLAY_ONE_MINUTE, target, amount);
     }
 
 }

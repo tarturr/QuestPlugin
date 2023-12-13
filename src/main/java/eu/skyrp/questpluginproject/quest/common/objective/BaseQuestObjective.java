@@ -2,8 +2,6 @@ package eu.skyrp.questpluginproject.quest.common.objective;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
@@ -12,7 +10,6 @@ import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.beans.PropertyChangeSupport;
-import java.util.UUID;
 
 /**
  * Classe qui représente un objectif de quête basique.
@@ -26,7 +23,6 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
     private final Class<T> eventType;
 
     protected final String id;
-    protected final UUID playerUUID;
     protected final U target;
     protected int amount;
     private int count;
@@ -37,14 +33,12 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
     /**
      * Constructeur de la classe BaseQuestObjective.
      * @param id Id de la quête.
-     * @param playerUUID UUID du joueur concerné par la quête.
      * @param target Objet inclus dans l'objectif de quête.
      */
-    public BaseQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount) {
+    public BaseQuestObjective(Class<T> eventType, String id, U target, int amount) {
         this.eventType = eventType;
 
         this.id = id;
-        this.playerUUID = playerUUID;
         this.target = target;
         this.amount = amount;
         this.count = 0;
@@ -64,16 +58,9 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
     /**
      * Réagit lorsque l'événement de type T est déclenché.
      * @param event L'event déclenché.
+     * @return true si l'event s'est correctement exécuté, false sinon.
      */
     public abstract boolean onEventTriggered(T event);
-
-    /**
-     * Obtenir le joueur
-     * @return Instance de l'objet
-     */
-    public Player player() {
-        return Bukkit.getPlayer(this.playerUUID);
-    }
 
     /**
      * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.

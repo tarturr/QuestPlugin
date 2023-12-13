@@ -9,33 +9,34 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<ItemStack> {
 
-    private final NamespacedKey playerItems;
+    private final JavaPlugin plugin;
+
+    private NamespacedKey playerItems;
 
     /**
      * Constructeur de la classe ItemStatisticQuestObjective.
      *
      * @param id         Id de la quête.
-     * @param playerUUID UUID du joueur concerné par la quête.
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseItemQuestObjective(Class<T> eventType, String id, UUID playerUUID, U target, int amount, JavaPlugin plugin) {
-        super(eventType, id, playerUUID, target, amount);
-        this.playerItems = new NamespacedKey(plugin, super.playerUUID().toString());
+    public BaseItemQuestObjective(Class<T> eventType, String id, U target, int amount, JavaPlugin plugin) {
+        super(eventType, id, target, amount);
+        this.plugin = plugin;
     }
 
     @Override
     public boolean hasElemPlayer(Player player, ItemStack elem) {
-        return elem.getItemMeta().getPersistentDataContainer().has(this.playerItems);
+        return this.playerItems != null && elem.getItemMeta().getPersistentDataContainer().has(this.playerItems);
     }
 
     @Override
     public void addPlayerToElem(Player player, ItemStack elem) {
+        this.playerItems = new NamespacedKey(plugin, player.getUniqueId().toString());
+
         ItemMeta meta = elem.getItemMeta();
 
         if (meta == null) {

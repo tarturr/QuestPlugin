@@ -7,13 +7,12 @@ import lombok.Singular;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SFPlaceMechanic extends BaseMechanic<SFPlaceQuestObjective> {
 
     @Builder
-    public SFPlaceMechanic(JavaPlugin main, UUID playerUUID, @Singular("objective") List<SFPlaceQuestObjective> objectives) {
-        super(main, playerUUID, objectives);
+    public SFPlaceMechanic(JavaPlugin main, @Singular("objective") List<SFPlaceQuestObjective> objectives) {
+        super(main, objectives);
     }
 
 }
