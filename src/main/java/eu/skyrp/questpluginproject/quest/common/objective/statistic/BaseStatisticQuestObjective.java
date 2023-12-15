@@ -37,7 +37,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
      */
     @Override
     public boolean onEventTriggered(PlayerStatisticIncrementEvent event) {
-        if (!(event.getStatistic() == this.type && (event.getMaterial() == super.target || event.getEntityType() == super.target))) {
+        if (!(event.getStatistic() == this.type && (super.target == null || super.target == event.getEntityType()))) {
             return false;
         }
 
