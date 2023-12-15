@@ -17,20 +17,20 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
     @Getter
     @Singular("objective")
     private final List<T> objectives;
+
+    @Getter
+    private final MechanicType type;
     private int endedObjectives;
 
     private final PropertyChangeSupport mechanicEndSupport;
 
-    public BaseMechanic(JavaPlugin main, List<T> objectives) {
+    public BaseMechanic(List<T> objectives, MechanicType type) {
         this.objectives = objectives;
+        this.type = type;
         this.endedObjectives = 0;
-
-        this.objectives.forEach(objective -> {
-            objective.endQuestSupport().addPropertyChangeListener(this);
-            main.getServer().getPluginManager().registerEvent(objective.getEventType(), objective, EventPriority.NORMAL, objective, main);
-        });
-
         this.mechanicEndSupport = new PropertyChangeSupport(this);
+
+        this.objectives.forEach(objective -> objective.endQuestSupport().addPropertyChangeListener(this));
     }
 
     @Override
@@ -46,5 +46,9 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.mechanicEndSupport.addPropertyChangeListener(listener);
+    }
+
+    public void registerAllObjectives(JavaPlugin main) {
+        this.objectives.forEach(objective -> main.getServer().getPluginManager().registerEvent(objective.getEventType(), objective, EventPriority.NORMAL, objective, main));
     }
 }
