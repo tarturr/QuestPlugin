@@ -9,17 +9,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<Block> {
 
-    private final JavaPlugin plugin;
+    private FixedMetadataValue metadata;
 
     /**
      * @param id         Id de la quête.
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseBlockQuestObjective(Class<T> eventType, String id, U target, int amount, JavaPlugin plugin) {
+    public BaseBlockQuestObjective(Class<T> eventType, String id, U target, int amount) {
         super(eventType, id, target, amount);
-        this.plugin = plugin;
     }
 
     protected abstract Player getEventPlayer(T event);
@@ -42,6 +40,15 @@ public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQu
      */
     @Override
     public final void addPlayerToElem(Player player, Block elem) {
-        elem.setMetadata(player.getUniqueId().toString(), new FixedMetadataValue(this.plugin, true));
+        if (this.metadata == null) {
+            throw new IllegalStateException("[QuestPlugin] The metadata of a block quest objective is missing. " +
+                    "Please consider the use of BaseBlockQuestObjective#initMetaData(JavaPlugin).");
+        }
+
+        elem.setMetadata(player.getUniqueId().toString(), this.metadata);
+    }
+
+    public void initMetaData(JavaPlugin plugin) {
+        this.metadata = new FixedMetadataValue(plugin, true);
     }
 }
