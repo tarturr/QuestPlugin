@@ -99,5 +99,11 @@
             <version>RC-35</version>
             <scope>provided</scope>
         </dependency>
+        <!-- FastInv -->
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>FastInv</artifactId>
+            <version>3.0.4</version>
+        </dependency>
     </dependencies>
 </project>
