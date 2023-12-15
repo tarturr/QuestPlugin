@@ -5,17 +5,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> extends BaseBlockQuestObjective<T, Material> {
     /**
      * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseVanillaBlockQuestObjective(Class<T> eventType, String id, String targetId, int amount, JavaPlugin plugin) {
-        super(eventType, id, Material.valueOf(targetId.toUpperCase()), amount, plugin);
+    public BaseVanillaBlockQuestObjective(Class<T> eventType, String id, String targetId, int amount) {
+        super(eventType, id, Material.valueOf(targetId.toUpperCase()), amount);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");

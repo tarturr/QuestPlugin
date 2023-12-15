@@ -6,7 +6,6 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickupItemEvent, SlimefunItem> {
     /**
@@ -15,9 +14,8 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public SFCollectQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
+    public SFCollectQuestObjective(String id, String targetId, int amount) {
         super(
                 EntityPickupItemEvent.class,
                 id,
@@ -28,8 +26,7 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
                         (item) -> SlimefunItem.getById(item) == null,
                         SlimefunItem::getById
                 ),
-                amount,
-                plugin
+                amount
         );
     }
 

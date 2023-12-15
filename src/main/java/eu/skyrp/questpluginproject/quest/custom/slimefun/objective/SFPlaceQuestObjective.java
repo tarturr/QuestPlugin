@@ -5,17 +5,15 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockPlaceEvent> {
     /**
      * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public SFPlaceQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
-        super(SlimefunBlockPlaceEvent.class, id, targetId, amount, plugin);
+    public SFPlaceQuestObjective(String id, String targetId, int amount) {
+        super(SlimefunBlockPlaceEvent.class, id, targetId, amount);
     }
 
     /**

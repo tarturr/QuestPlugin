@@ -6,7 +6,6 @@ import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObj
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickupItemEvent, CustomStack> {
     /**
@@ -15,9 +14,8 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public IACollectQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
+    public IACollectQuestObjective(String id, String targetId, int amount) {
         super(
                 EntityPickupItemEvent.class,
                 id,
@@ -28,8 +26,7 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
                         CustomStack::isInRegistry,
                         CustomStack::getInstance
                 ),
-                amount,
-                plugin
+                amount
         );
     }
 

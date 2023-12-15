@@ -5,7 +5,6 @@ import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlockPlaceEvent> {
     /**
@@ -14,8 +13,8 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      * @param plugin     Instance de la classe principale du plugin.
      */
-    public IAPlaceQuestObjective(String id, String targetId, int amount, JavaPlugin plugin) {
-        super(CustomBlockPlaceEvent.class, id, targetId, amount, plugin);
+    public IAPlaceQuestObjective(String id, String targetId, int amount) {
+        super(CustomBlockPlaceEvent.class, id, targetId, amount);
     }
 
     /**

@@ -7,11 +7,9 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQuestObjective<T, U> implements Cachable<ItemStack> {
 
-    private final JavaPlugin plugin;
 
     private NamespacedKey playerItems;
 
@@ -21,11 +19,9 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQue
      * @param id         Id de la quête.
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
-    public BaseItemQuestObjective(Class<T> eventType, String id, U target, int amount, JavaPlugin plugin) {
+    public BaseItemQuestObjective(Class<T> eventType, String id, U target, int amount) {
         super(eventType, id, target, amount);
-        this.plugin = plugin;
     }
 
     @Override
@@ -35,7 +31,7 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQue
 
     @Override
     public void addPlayerToElem(Player player, ItemStack elem) {
-        this.playerItems = new NamespacedKey(plugin, player.getUniqueId().toString());
+        this.playerItems = new NamespacedKey("ItemQuestObjective", player.getUniqueId().toString());
 
         ItemMeta meta = elem.getItemMeta();
 
