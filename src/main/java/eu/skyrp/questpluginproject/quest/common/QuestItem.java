@@ -37,7 +37,8 @@ public record QuestItem(String name, int amount, QuestItemType itemType) {
         return switch (this.itemType) {
             case VANILLA -> new ItemStack(Material.valueOf(this.name.toUpperCase()), this.amount);
             case ITEMSADDER -> {
-                String item = this.name.split(":")[1];
+                final String[] split = this.name.split(":");
+                String item = split[1] + ":" + split[2];
 
                 if (!CustomStack.isInRegistry(item)) {
                     throw new CustomItemNotFoundException("ItemsAdder", this.name);
