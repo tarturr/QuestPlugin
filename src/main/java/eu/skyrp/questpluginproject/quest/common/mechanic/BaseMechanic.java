@@ -39,7 +39,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
             this.endedObjectives++;
 
             if (this.endedObjectives == this.objectives.size()) {
-                this.mechanicEndSupport.firePropertyChange("objectivesAllEnded", false, true);
+                this.mechanicEndSupport.firePropertyChange("mechanicEnded", false, true);
             }
         }
     }
