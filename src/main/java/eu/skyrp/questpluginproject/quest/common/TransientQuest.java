@@ -28,7 +28,7 @@ public abstract class TransientQuest extends Quest {
     }
 
     public void reload(Player player) {
-        if (super.state() != QuestState.NOT_ACCESSIBLE && this.getTimeLeft() < 0 && super.state() == QuestState.PENDING) {
+        if (this.getTimeLeft() < 0 && super.state() == QuestState.PENDING) {
             super.state(QuestState.ENDED);
             this.forceQuestEnd(player);
         }
