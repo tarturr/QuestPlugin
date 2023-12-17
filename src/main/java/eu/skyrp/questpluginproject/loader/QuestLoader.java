@@ -1,55 +1,61 @@
 package eu.skyrp.questpluginproject.loader;
 
-import eu.skyrp.questpluginproject.quest.DailyQuest;
-import eu.skyrp.questpluginproject.quest.EventQuest;
-import eu.skyrp.questpluginproject.quest.OnlyOnceQuest;
-import eu.skyrp.questpluginproject.quest.WeeklyQuest;
 import eu.skyrp.questpluginproject.quest.common.Quest;
-import eu.skyrp.questpluginproject.quest.common.QuestType;
+import eu.skyrp.questpluginproject.quest.common.QuestInitializer;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class QuestLoader {
 
     @Getter
     @Accessors(fluent = true)
-    private final List<Quest> quests;
+    private final Map<String, YamlConfiguration> questConfigurations;
 
-    public QuestLoader(File pluginFolder) {
-        this.quests = new ArrayList<>();
+    public QuestLoader(File parentFolder) {
+        this.questConfigurations = new HashMap<>();
 
-        File[] children = pluginFolder.listFiles();
+        File[] children = parentFolder.listFiles();
 
         if (children != null) {
             for (File file : children) {
-                if (file.isFile() && file.getName().endsWith(".yml") && !file.getName().startsWith("_")) {
+                if (file.isFile() && file.getName().endsWith(".yml") && !file.getName().startsWith("_") && !file.getName().equals("config.yml")) {
                     YamlConfiguration conf = YamlConfiguration.loadConfiguration(file);
-                    String path = file.getPath();
-                    Quest quest = switch (QuestType.valueOf(Objects.requireNonNull(conf.getString("quest.type")).toUpperCase())) {
-                            case DAILY -> DailyQuest.createFromConfiguration(path, conf);
-                            case EVENT -> EventQuest.createFromConfiguration(path, conf);
-                            case ONLY_ONCE -> OnlyOnceQuest.createFromConfiguration(path, conf);
-                            case WEEKLY -> WeeklyQuest.createFromConfiguration(path, conf);
-                    };
+                    String id = Objects.requireNonNull(conf.getString("quest.id"));
+                    Optional<YamlConfiguration> found = this.getConfigurationByQuestId(id);
 
-                    if (this.quests.stream().anyMatch(loadedQuest -> loadedQuest.id().equals(quest.id()))) {
-                        throw new IllegalStateException("[QuestPlugin] Two quests with the same \"" + quest.id() +
-                                "\" have been found in multiple quest configuration files. Please consider using a " +
-                                "different quest ID for the \"" + file.getPath() + "\" quest configuration file.");
+                    if (found.isPresent()) {
+                        throw new IllegalStateException("[QuestPlugin] Two quests with the same \"" + id + "\" have " +
+                                "been found in multiple quest configuration files. Please consider using a " +
+                                "different quest ID for the \"" + file.getPath() + "\" or in the \"" +
+                                found.get().getCurrentPath() + "\" quest configuration file.");
                     }
 
-                    this.quests.add(quest);
+                    this.questConfigurations.put(id, conf);
                 } else if (file.isDirectory()) {
-                    this.quests.addAll(new QuestLoader(file).quests());
+                    this.questConfigurations.putAll(new QuestLoader(file).questConfigurations());
                 }
             }
         }
+    }
+
+    public Optional<YamlConfiguration> getConfigurationByQuestId(String questId) {
+        Optional<String> found = this.questConfigurations.keySet().stream().filter(questConf -> questConf.equals(questId)).findFirst();
+        return found.map(this.questConfigurations::get);
+    }
+
+    public Optional<Quest> getQuestById(String id) {
+        Optional<YamlConfiguration> possibleConf = this.getConfigurationByQuestId(id);
+
+        if (possibleConf.isEmpty()) {
+            return Optional.empty();
+        }
+
+        YamlConfiguration conf = possibleConf.get();
+        return Optional.of(QuestInitializer.init(conf));
     }
 
 }
