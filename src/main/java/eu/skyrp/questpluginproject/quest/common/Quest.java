@@ -10,18 +10,20 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Getter
 @Setter
 @Accessors(fluent = true)
 @NoArgsConstructor
-public abstract class Quest {
+public abstract class Quest implements PropertyChangeListener {
 
     private String id;
-    @Setter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.NONE)
     private QuestState state;
 
     private QuestType type;
@@ -29,7 +31,10 @@ public abstract class Quest {
     private List<String> lore;
     private QuestReward reward;
     private String nextId;
+    @Setter(AccessLevel.NONE)
     private MechanicManager mechanicManager;
+
+    private PropertyChangeSupport support;
 
     public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager) {
         this(type, id, name, lore, reward, mechanicManager, (String) null);
@@ -44,14 +49,16 @@ public abstract class Quest {
         this.lore = lore;
         this.reward = reward;
         this.mechanicManager = mechanicManager;
+        this.mechanicManager.addPropertyChangeListener(this);
         this.nextId = nextId;
+        this.support = new PropertyChangeSupport(this);
     }
 
     public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, Quest next) {
         this(type, id, name, lore, reward, mechanicManager, next.id());
     }
 
-    public static void initQuestFromConfiguration(Quest quest, YamlConfiguration conf) {
+    protected static void initQuestFromConfiguration(Quest quest, YamlConfiguration conf) {
         ConfigurationSection section = Objects.requireNonNull(conf.getConfigurationSection("quest"));
 
         quest.id(Objects.requireNonNull(section.getString("id")))
@@ -59,32 +66,37 @@ public abstract class Quest {
                 .name(Objects.requireNonNull(section.getString("name")))
                 .lore(section.getStringList("lore"))
                 .reward(QuestReward.createFromConfigurationSection(conf.getCurrentPath(), section.getConfigurationSection("rewards")))
-                .mechanicManager(MechanicManager.createFromConfigurationSection(conf.getCurrentPath(), Objects.requireNonNull(conf.getConfigurationSection("mechanics"))));
+                .mechanicManager(MechanicManager.createFromConfigurationSection(conf.getCurrentPath(), Objects.requireNonNull(conf.getConfigurationSection("mechanics"))))
+                .support(new PropertyChangeSupport(quest));
     }
 
     public abstract void onQuestEnds(Player player);
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if (event.getPropertyName().equals("allMechanicsEnded")) {
+            this.state(QuestState.ENDED);
+        }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.support.addPropertyChangeListener(listener);
+    }
 
     public boolean hasNext() {
         return this.nextId != null;
     }
 
-    public QuestType getType() {
-        return type;
+    public Quest mechanicManager(MechanicManager mechanicManager) {
+        mechanicManager.addPropertyChangeListener(this);
+        this.mechanicManager = mechanicManager;
+        return this;
     }
 
-    public Quest next(List<Quest> initializedQuests) {
-        if (!this.hasNext()) {
-            throw new IllegalStateException("[QuestPlugin] Trying to access to the unexisting next quest of the " +
-                    "quest with the \"" + this.id + "\" ID.");
-        }
-
-        Optional<Quest> nextQuest = initializedQuests.stream().filter(quest -> quest.id().equals(this.nextId)).findFirst();
-
-        if (nextQuest.isEmpty()) {
-            throw new IllegalStateException("[QuestPlugin] Trying to access to the unexisting \"" + this.nextId +
-                    "\" (ID) next quest of the \"" + this.id + "\" (ID) quest.");
-        }
-
-        return nextQuest.get();
+    public Quest state(QuestState state) {
+        QuestState old = this.state;
+        this.state = state;
+        this.support.firePropertyChange(this.id, old, this.state);
+        return this;
     }
 }
