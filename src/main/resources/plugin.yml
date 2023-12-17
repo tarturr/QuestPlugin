@@ -2,3 +2,8 @@ name: QuestPlugin
 version: '${project.version}'
 main: eu.skyrp.questpluginproject.QuestPlugin
 api-version: '1.18'
+description: Plugin de quetes.
+commands:
+  quest:
+    description: 'Get informations on your quest.'
+    permission: quest.view
