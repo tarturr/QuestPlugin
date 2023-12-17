@@ -30,7 +30,9 @@ public record QuestItem(String name, int amount, QuestItemType itemType) {
                     "configuration file.");
         }
 
-        return new QuestItem(item, amount, QuestItemType.getTypeByName(item == null ? block : item));
+        String itemName = item == null ? block : item;
+
+        return new QuestItem(itemName, amount, QuestItemType.getTypeByName(itemName));
     }
 
     public ItemStack getItemStack() {
