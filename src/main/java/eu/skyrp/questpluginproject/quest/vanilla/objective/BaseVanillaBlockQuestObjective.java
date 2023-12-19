@@ -41,6 +41,6 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        return super.getCount() >= super.getAmount();
+        return super.count() >= super.amount();
     }
 }

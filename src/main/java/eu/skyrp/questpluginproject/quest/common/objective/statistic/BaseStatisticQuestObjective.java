@@ -26,7 +26,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
     public BaseStatisticQuestObjective(String id, Statistic type, T target, int amount) {
         super(PlayerStatisticIncrementEvent.class, id, target, amount);
         this.type = type;
-        super.amount = amount + this.getCount();
+        super.amount = amount + this.count();
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
             return false;
         }
 
-        return this.getCount(event.getPlayer()) >= this.getAmount();
+        return this.getCount(event.getPlayer()) >= this.amount();
     }
 
     public int getCount(Player player) {

@@ -41,6 +41,6 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
         super.incrementCount();
         super.addPlayerToElem(player, item);
 
-        return super.getCount() >= super.getAmount();
+        return super.count() >= super.amount();
     }
 }

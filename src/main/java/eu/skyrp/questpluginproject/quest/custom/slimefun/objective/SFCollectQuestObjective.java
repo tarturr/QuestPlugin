@@ -47,6 +47,6 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super.incrementCount();
         super.addPlayerToElem(player, item);
 
-        return super.getCount() >= super.getAmount();
+        return super.count() >= super.amount();
     }
 }

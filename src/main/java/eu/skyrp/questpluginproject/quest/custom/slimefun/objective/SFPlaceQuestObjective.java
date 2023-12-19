@@ -38,7 +38,7 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        return super.getCount() >= super.getAmount();
+        return super.count() >= super.amount();
     }
 
     @Override

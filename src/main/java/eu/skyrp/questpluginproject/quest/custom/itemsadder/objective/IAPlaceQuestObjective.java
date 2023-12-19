@@ -11,7 +11,6 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
-     * @param plugin     Instance de la classe principale du plugin.
      */
     public IAPlaceQuestObjective(String id, String targetId, int amount) {
         super(CustomBlockPlaceEvent.class, id, targetId, amount);
@@ -39,7 +38,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
         this.addPlayerToElem(player, block);
         super.incrementCount();
 
-        return super.getCount() >= super.getAmount();
+        return super.count() >= super.amount();
     }
 
     @Override

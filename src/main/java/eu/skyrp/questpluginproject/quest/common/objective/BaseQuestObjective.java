@@ -3,7 +3,6 @@ package eu.skyrp.questpluginproject.quest.common.objective;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
@@ -62,32 +61,13 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
      */
     public abstract boolean onEventTriggered(T event);
 
-    /**
-     * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
-     * @return Avancée du joueur sous forme de nombre entier.
-     */
-    public final int getAmount() {
-        return this.amount;
-    }
-
     protected final void incrementCount() {
         ++this.count;
     }
 
-    /**
-     * Obtenir l'avancée du joueur sur sa quête sous forme de nombre entier.
-     * @return Avancée du joueur sous forme de nombre entier.
-     */
-    public int getCount() {
-        return this.count;
-    }
-
     @Override
-    public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
+    public void execute(@NotNull Listener listener, @NotNull Event event) {
         this.onEvent((T) event);
     }
 
-    public Class<T> getEventType() {
-        return eventType;
-    }
 }

@@ -51,7 +51,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
 
     public void registerAllObjectives(JavaPlugin main) {
         this.objectives.forEach(objective -> {
-            main.getServer().getPluginManager().registerEvent(objective.getEventType(), objective, EventPriority.NORMAL, objective, main);
+            main.getServer().getPluginManager().registerEvent(objective.eventType(), objective, EventPriority.NORMAL, objective, main);
 
             if (objective instanceof BaseBlockQuestObjective<?,?> blockObjective) {
                 blockObjective.initMetaData(main);
