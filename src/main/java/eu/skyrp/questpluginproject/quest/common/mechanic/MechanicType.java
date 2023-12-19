@@ -27,42 +27,38 @@ import java.util.function.BiFunction;
 
 public enum MechanicType {
     BREAK((name, section) -> {
-        BaseMechanic<?>[] possibleMechanics = new BaseMechanic[]{
-                new BreakMechanic(new ArrayList<>()),
-                new IABreakMechanic(new ArrayList<>()),
-                new SFBreakMechanic(new ArrayList<>())
-        };
+        BreakMechanic vanilla = new BreakMechanic(new ArrayList<>());
+        IABreakMechanic itemsAdder = new IABreakMechanic(new ArrayList<>());
+        SFBreakMechanic slimeFun = new SFBreakMechanic(new ArrayList<>());
 
         for (String itemSection : section.getKeys(false)) {
             QuestItem item = QuestItem.createFromConfigurationSection(name, section.getConfigurationSection(itemSection));
 
             switch (item.itemType()) {
-                case VANILLA -> ((BreakMechanic) possibleMechanics[0]).objectives().add(new BreakQuestObjective(name, item.name(), item.amount()));
-                case ITEMSADDER -> ((IABreakMechanic) possibleMechanics[1]).objectives().add(new IABreakQuestObjective(name, item.name(), item.amount()));
-                case SLIMEFUN -> ((SFBreakMechanic) possibleMechanics[2]).objectives().add(new SFBreakQuestObjective(name, item.name(), item.amount()));
+                case VANILLA -> vanilla.objectives().add(new BreakQuestObjective(name, item.name(), item.amount()));
+                case ITEMSADDER -> itemsAdder.objectives().add(new IABreakQuestObjective(name, item.name(), item.amount()));
+                case SLIMEFUN -> slimeFun.objectives().add(new SFBreakQuestObjective(name, item.name(), item.amount()));
             }
         }
 
-        return possibleMechanics;
+        return new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
     }),
     COLLECT((name, section) -> {
-        BaseMechanic<?>[] possibleMechanics = new BaseMechanic[] {
-                new CollectMechanic(new ArrayList<>()),
-                new IACollectMechanic(new ArrayList<>()),
-                new SFCollectMechanic(new ArrayList<>())
-        };
+        CollectMechanic vanilla = new CollectMechanic(new ArrayList<>());
+        IACollectMechanic itemsAdder = new IACollectMechanic(new ArrayList<>());
+        SFCollectMechanic slimeFun = new SFCollectMechanic(new ArrayList<>());
 
         for (String itemSection : section.getKeys(false)) {
             QuestItem item = QuestItem.createFromConfigurationSection(name, section.getConfigurationSection(itemSection));
 
             switch (item.itemType()) {
-                case VANILLA -> ((CollectMechanic) possibleMechanics[0]).objectives().add(new CollectQuestObjective(name, item.name(), item.amount()));
-                case ITEMSADDER -> ((IACollectMechanic) possibleMechanics[1]).objectives().add(new IACollectQuestObjective(name, item.name(), item.amount()));
-                case SLIMEFUN -> ((SFCollectMechanic) possibleMechanics[2]).objectives().add(new SFCollectQuestObjective(name, item.name(), item.amount()));
+                case VANILLA -> vanilla.objectives().add(new CollectQuestObjective(name, item.name(), item.amount()));
+                case ITEMSADDER -> itemsAdder.objectives().add(new IACollectQuestObjective(name, item.name(), item.amount()));
+                case SLIMEFUN -> slimeFun.objectives().add(new SFCollectQuestObjective(name, item.name(), item.amount()));
             }
         }
 
-        return possibleMechanics;
+        return new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
     }),
     CONNECT((name, section) -> {
         ConnectMechanic mechanic = new ConnectMechanic(new ArrayList<>());
@@ -82,32 +78,30 @@ public enum MechanicType {
         return new KillMechanic[] { mechanic };
     }),
     PLACE((name, section) -> {
-        BaseMechanic<?>[] possibleMechanics = new BaseMechanic[] {
-                new PlaceMechanic(new ArrayList<>()),
-                new IAPlaceMechanic(new ArrayList<>()),
-                new IACollectMechanic(new ArrayList<>())
-        };
+        PlaceMechanic vanilla = new PlaceMechanic(new ArrayList<>());
+        IAPlaceMechanic itemsAdder = new IAPlaceMechanic(new ArrayList<>());
+        SFPlaceMechanic slimeFun = new SFPlaceMechanic(new ArrayList<>());
 
         for (String itemSection : section.getKeys(false)) {
             QuestItem item = QuestItem.createFromConfigurationSection(name, section.getConfigurationSection(itemSection));
 
             switch (item.itemType()) {
-                case VANILLA -> ((PlaceMechanic) possibleMechanics[0]).objectives().add(new PlaceQuestObjective(name, item.name(), item.amount()));
-                case ITEMSADDER -> ((IAPlaceMechanic) possibleMechanics[1]).objectives().add(new IAPlaceQuestObjective(name, item.name(), item.amount()));
-                case SLIMEFUN -> ((SFPlaceMechanic) possibleMechanics[2]).objectives().add(new SFPlaceQuestObjective(name, item.name(), item.amount()));
+                case VANILLA -> vanilla.objectives().add(new PlaceQuestObjective(name, item.name(), item.amount()));
+                case ITEMSADDER -> itemsAdder.objectives().add(new IAPlaceQuestObjective(name, item.name(), item.amount()));
+                case SLIMEFUN -> slimeFun.objectives().add(new SFPlaceQuestObjective(name, item.name(), item.amount()));
             }
         }
 
-        return possibleMechanics;
+        return new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
     }),
     TRAVEL((name, section) -> {
-        TravelMechanic[] possibleMechanic = new TravelMechanic[] { new TravelMechanic(new ArrayList<>()) };
+        TravelMechanic mechanic = new TravelMechanic(new ArrayList<>());
 
         ConfigurationSection parentSection = Objects.requireNonNull(section.getParent());
         List<String> regionIds = Objects.requireNonNull(parentSection.getStringList(section.getName()));
-        possibleMechanic[0].objectives().add(new TravelQuestObjective(name, regionIds));
+        mechanic.objectives().add(new TravelQuestObjective(name, regionIds));
 
-        return possibleMechanic;
+        return new BaseMechanic[] { mechanic };
     });
 
     @Getter
