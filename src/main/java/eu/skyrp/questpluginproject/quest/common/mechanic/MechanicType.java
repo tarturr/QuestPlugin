@@ -17,8 +17,8 @@ import eu.skyrp.questpluginproject.quest.vanilla.mechanic.*;
 import eu.skyrp.questpluginproject.quest.vanilla.objective.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +65,22 @@ public enum MechanicType {
         return possibleMechanics;
     }),
     CONNECT((name, section) -> {
-        ConnectMechanic[] possibleMechanic = new ConnectMechanic[] { new ConnectMechanic(new ArrayList<>()) };
+        ConnectMechanic mechanic = new ConnectMechanic(new ArrayList<>());
 
         int time = section.getInt("time");
-        (possibleMechanic[0]).objectives().add(new ConnectQuestObjective(name, time));
+        mechanic.objectives().add(new ConnectQuestObjective(name, time));
 
-        return possibleMechanic;
+        return new ConnectMechanic[] { mechanic };
     }),
-    KILL((name, section) -> { throw new NotImplementedException("[QuestPlugin] The kill mechanic is not implemented yet."); }), // TODO: Implement this feature
+    KILL((name, section) -> {
+        KillMechanic mechanic = new KillMechanic(new ArrayList<>());
+
+        EntityType entityType = EntityType.valueOf(Objects.requireNonNull(section.getString("type")));
+        int amount = section.getInt("amount");
+        mechanic.objectives().add(new KillQuestObjective(name, entityType, amount));
+
+        return new KillMechanic[] { mechanic };
+    }),
     PLACE((name, section) -> {
         BaseMechanic<?>[] possibleMechanics = new BaseMechanic[] {
                 new PlaceMechanic(new ArrayList<>()),
