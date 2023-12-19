@@ -31,8 +31,10 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
 
     /**
      * Constructeur de la classe BaseQuestObjective.
+     * @param eventType Le type d'event qui sera utilisé par la quête sous forme d'object {@link Class}.
      * @param id Id de la quête.
      * @param target Objet inclus dans l'objectif de quête.
+     * @param amount L'objectif à atteindre sous forme de chiffre
      */
     public BaseQuestObjective(Class<T> eventType, String id, U target, int amount) {
         this.eventType = eventType;
