@@ -13,20 +13,16 @@ import eu.skyrp.questpluginproject.quest.custom.slimefun.mechanic.SFPlaceMechani
 import eu.skyrp.questpluginproject.quest.custom.slimefun.objective.SFBreakQuestObjective;
 import eu.skyrp.questpluginproject.quest.custom.slimefun.objective.SFCollectQuestObjective;
 import eu.skyrp.questpluginproject.quest.custom.slimefun.objective.SFPlaceQuestObjective;
-import eu.skyrp.questpluginproject.quest.vanilla.mechanic.BreakMechanic;
-import eu.skyrp.questpluginproject.quest.vanilla.mechanic.CollectMechanic;
-import eu.skyrp.questpluginproject.quest.vanilla.mechanic.ConnectMechanic;
-import eu.skyrp.questpluginproject.quest.vanilla.mechanic.PlaceMechanic;
-import eu.skyrp.questpluginproject.quest.vanilla.objective.BreakQuestObjective;
-import eu.skyrp.questpluginproject.quest.vanilla.objective.CollectQuestObjective;
-import eu.skyrp.questpluginproject.quest.vanilla.objective.ConnectQuestObjective;
-import eu.skyrp.questpluginproject.quest.vanilla.objective.PlaceQuestObjective;
+import eu.skyrp.questpluginproject.quest.vanilla.mechanic.*;
+import eu.skyrp.questpluginproject.quest.vanilla.objective.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 public enum MechanicType {
@@ -69,14 +65,12 @@ public enum MechanicType {
         return possibleMechanics;
     }),
     CONNECT((name, section) -> {
-        BaseMechanic<?>[] possibleMechanics = new BaseMechanic[] {
-                new ConnectMechanic(new ArrayList<>())
-        };
+        ConnectMechanic[] possibleMechanic = new ConnectMechanic[] { new ConnectMechanic(new ArrayList<>()) };
 
         int time = section.getInt("time");
-        ((ConnectMechanic) possibleMechanics[0]).objectives().add(new ConnectQuestObjective(name, time));
+        (possibleMechanic[0]).objectives().add(new ConnectQuestObjective(name, time));
 
-        return possibleMechanics;
+        return possibleMechanic;
     }),
     KILL((name, section) -> { throw new NotImplementedException("[QuestPlugin] The kill mechanic is not implemented yet."); }), // TODO: Implement this feature
     PLACE((name, section) -> {
@@ -98,7 +92,15 @@ public enum MechanicType {
 
         return possibleMechanics;
     }),
-    TRAVEL((name, section) -> { throw new NotImplementedException("[QuestPlugin] The travel mechanic is not implemented yet."); }); // TODO: Implement this feature
+    TRAVEL((name, section) -> {
+        TravelMechanic[] possibleMechanic = new TravelMechanic[] { new TravelMechanic(new ArrayList<>()) };
+
+        ConfigurationSection parentSection = Objects.requireNonNull(section.getParent());
+        List<String> regionIds = Objects.requireNonNull(parentSection.getStringList(section.getName()));
+        possibleMechanic[0].objectives().add(new TravelQuestObjective(name, regionIds));
+
+        return possibleMechanic;
+    });
 
     @Getter
     @Accessors(fluent = true)
