@@ -5,6 +5,7 @@ api-version: '1.18'
 description: Plugin de quetes.
 depend:
   - WorldGuard
+  - Vault
 commands:
   quest:
     description: 'Get informations on your quest.'
