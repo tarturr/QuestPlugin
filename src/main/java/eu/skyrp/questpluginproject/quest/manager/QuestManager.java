@@ -3,6 +3,8 @@ package eu.skyrp.questpluginproject.quest.manager;
 import eu.skyrp.questpluginproject.loader.QuestLoader;
 import eu.skyrp.questpluginproject.quest.common.PlayerQuests;
 import eu.skyrp.questpluginproject.quest.common.Quest;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeEvent;
@@ -15,6 +17,7 @@ public class QuestManager implements PropertyChangeListener {
     private final List<PlayerQuests> playerQuests;
     private QuestLoader questLoader;
     private final File parentFolder;
+    private final Economy economy;
 
     private final JavaPlugin main;
 
@@ -22,6 +25,8 @@ public class QuestManager implements PropertyChangeListener {
         this.playerQuests = new ArrayList<>();
         this.parentFolder = main.getDataFolder();
         this.questLoader = new QuestLoader(this.parentFolder);
+        this.economy = this.setupEconomy(main);
+
         this.main = main;
     }
 
@@ -53,7 +58,7 @@ public class QuestManager implements PropertyChangeListener {
         if (searchedQuest.isPresent()) {
             boolean result = quests.add(searchedQuest.get());
             quests.addPropertyChangeListener(this);
-            quests.registerAllQuests(this.main);
+            quests.registerAllQuests(this.main, this.economy);
             return result;
         }
 
@@ -79,5 +84,19 @@ public class QuestManager implements PropertyChangeListener {
     public void reload() {
         this.playerQuests.clear();
         this.questLoader = new QuestLoader(this.parentFolder);
+    }
+
+    private Economy setupEconomy(JavaPlugin main) {
+        RegisteredServiceProvider<Economy> rsp = main.getServer().getServicesManager().getRegistration(Economy.class);
+
+        if (rsp == null) {
+            throw new TypeNotPresentException(
+                    "net.milkbowl.vault.economy.Economy",
+                    new Throwable("[QuestPlugin] The plugin cannot find the Vault dependency. Please consider adding " +
+                            "the Vault plugin to the \"plugins/\" server folder!")
+            );
+        }
+
+        return rsp.getProvider();
     }
 }

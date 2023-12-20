@@ -2,7 +2,9 @@ package eu.skyrp.questpluginproject.quest.common;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeEvent;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 public class PlayerQuests implements PropertyChangeListener {
+
     private final UUID uuid;
     private final List<Quest> quests;
 
@@ -40,7 +43,10 @@ public class PlayerQuests implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         Quest changedQuest = this.quests.stream().filter(quest -> quest.id().equals(event.getPropertyName())).findAny().orElseThrow();
-        changedQuest.onQuestEnds(Bukkit.getPlayer(uuid));
+
+        Player player = Bukkit.getPlayer(uuid);
+        changedQuest.onQuestEnds(player);
+        changedQuest.reward().giveToPlayer(player);
 
         this.quests.remove(changedQuest);
 
@@ -53,7 +59,10 @@ public class PlayerQuests implements PropertyChangeListener {
         this.support.addPropertyChangeListener(listener);
     }
 
-    public void registerAllQuests(JavaPlugin main) {
-        this.quests.forEach(quest -> quest.mechanicManager().registerAllMechanics(main));
+    public void registerAllQuests(JavaPlugin main, Economy economy) {
+        this.quests.forEach(quest -> {
+            quest.mechanicManager().registerAllMechanics(main);
+            quest.reward().economy(economy);
+        });
     }
 }
