@@ -2,6 +2,10 @@ package eu.skyrp.questpluginproject.lib.database.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class BaseDatabaseConnection {
 
@@ -52,5 +56,21 @@ public abstract class BaseDatabaseConnection {
 
     public Connection get() {
         return connection;
+    }
+
+    public static <T> String createStringFromList(List<T> list, Function<T, String> turnToString) {
+        return list.stream()
+                .map(turnToString)
+                .collect(Collectors.joining(","));
+    }
+
+    public static <T> List<T> fetchListFromString(String str, Function<String, T> turnStringToObject) {
+        return Arrays.stream(str.split(","))
+                .map(turnStringToObject)
+                .toList();
+    }
+
+    public static List<Integer> fetchIntegerListFromString(String str) {
+        return fetchListFromString(str, Integer::parseInt);
     }
 }
