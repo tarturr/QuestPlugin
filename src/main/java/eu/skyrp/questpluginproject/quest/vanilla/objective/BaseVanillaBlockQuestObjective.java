@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -12,8 +13,8 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseVanillaBlockQuestObjective(Class<T> eventType, String id, String targetId, int amount) {
-        super(eventType, id, Material.valueOf(targetId.toUpperCase()), amount);
+    public BaseVanillaBlockQuestObjective(Class<T> eventType, ObjectiveType type, String id, String targetId, int amount) {
+        super(eventType,type, id, Material.valueOf(targetId.toUpperCase()), amount);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");

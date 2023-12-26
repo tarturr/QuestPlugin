@@ -2,6 +2,7 @@ package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +14,7 @@ public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public IAPlaceQuestObjective(String id, String targetId, int amount) {
-        super(CustomBlockPlaceEvent.class, id, targetId, amount);
+        super(CustomBlockPlaceEvent.class, ObjectiveType.PLACE, id, targetId, amount);
     }
 
     /**

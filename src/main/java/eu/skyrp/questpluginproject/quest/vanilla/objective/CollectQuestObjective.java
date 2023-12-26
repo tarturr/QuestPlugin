@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import lombok.Builder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
      */
     @Builder
     public CollectQuestObjective(String id, String targetId, int amount) {
-        super(EntityPickupItemEvent.class, id, Material.valueOf(targetId.toUpperCase()), amount);
+        super(EntityPickupItemEvent.class, ObjectiveType.COLLECT, id, Material.valueOf(targetId.toUpperCase()), amount);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");

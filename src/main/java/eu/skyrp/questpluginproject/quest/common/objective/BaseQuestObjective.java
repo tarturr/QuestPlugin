@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.objective;
 
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.bukkit.event.Event;
@@ -20,6 +21,7 @@ import java.beans.PropertyChangeSupport;
 public abstract class BaseQuestObjective<T extends Event, U> implements Listener, EventExecutor {
 
     private final Class<T> eventType;
+    private final ObjectiveType type;
 
     protected final String id;
     protected final U target;
@@ -36,8 +38,9 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
      * @param target Objet inclus dans l'objectif de quête.
      * @param amount L'objectif à atteindre sous forme de chiffre
      */
-    public BaseQuestObjective(Class<T> eventType, String id, U target, int amount) {
+    public BaseQuestObjective(Class<T> eventType, ObjectiveType type, String id, U target, int amount) {
         this.eventType = eventType;
+        this.type = type;
 
         this.id = id;
         this.target = target;

@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.common.objective.cache;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -16,8 +17,8 @@ public abstract class BaseBlockQuestObjective<T extends Event, U> extends BaseQu
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseBlockQuestObjective(Class<T> eventType, String id, U target, int amount) {
-        super(eventType, id, target, amount);
+    public BaseBlockQuestObjective(Class<T> eventType, ObjectiveType type, String id, U target, int amount) {
+        super(eventType, type, id, target, amount);
     }
 
     protected abstract Player getEventPlayer(T event);

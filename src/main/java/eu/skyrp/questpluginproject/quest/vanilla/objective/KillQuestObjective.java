@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.statistic.BaseStatisticQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import lombok.Builder;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
@@ -15,7 +16,7 @@ public class KillQuestObjective extends BaseStatisticQuestObjective<EntityType> 
      */
     @Builder
     public KillQuestObjective(String id, EntityType target, int amount) {
-        super(id, Statistic.PLAYER_KILLS, target, amount);
+        super(id, ObjectiveType.KILL, Statistic.PLAYER_KILLS, target, amount);
     }
 
 }

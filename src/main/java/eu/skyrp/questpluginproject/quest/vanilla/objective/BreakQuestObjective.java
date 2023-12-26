@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -10,7 +11,7 @@ public class BreakQuestObjective extends BaseVanillaBlockQuestObjective<BlockBre
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public BreakQuestObjective(String id, String targetId, int amount) {
-        super(BlockBreakEvent.class, id, targetId, amount);
+        super(BlockBreakEvent.class, ObjectiveType.BREAK, id, targetId, amount);
     }
 
     @Override

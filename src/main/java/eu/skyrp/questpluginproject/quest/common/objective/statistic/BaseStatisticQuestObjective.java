@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.common.objective.statistic;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -23,8 +24,8 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
      * @param type Type de Statistic à vérifier.
      * @param amount Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseStatisticQuestObjective(String id, Statistic type, T target, int amount) {
-        super(PlayerStatisticIncrementEvent.class, id, target, amount);
+    public BaseStatisticQuestObjective(String id, ObjectiveType objectiveType, Statistic type, T target, int amount) {
+        super(PlayerStatisticIncrementEvent.class, objectiveType, id, target, amount);
         this.type = type;
         super.amount = amount + this.count();
     }

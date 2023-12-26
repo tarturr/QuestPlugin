@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomBlock;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
 import org.bukkit.event.player.PlayerEvent;
@@ -11,9 +12,10 @@ public abstract class BaseIABlockQuestObjective<T extends PlayerEvent> extends B
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseIABlockQuestObjective(Class<T> eventType, String id, String targetId, int amount) {
+    public BaseIABlockQuestObjective(Class<T> eventType, ObjectiveType type, String id, String targetId, int amount) {
         super(
                 eventType,
+                type,
                 id,
                 CustomObjectFinder.getById(
                         targetId,

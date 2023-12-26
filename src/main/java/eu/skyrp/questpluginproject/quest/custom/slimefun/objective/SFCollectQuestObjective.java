@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -18,6 +19,7 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
     public SFCollectQuestObjective(String id, String targetId, int amount) {
         super(
                 EntityPickupItemEvent.class,
+                ObjectiveType.COLLECT,
                 id,
                 CustomObjectFinder.getById(
                         targetId,

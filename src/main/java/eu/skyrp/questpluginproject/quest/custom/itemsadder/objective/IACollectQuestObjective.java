@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomStack;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
     public IACollectQuestObjective(String id, String targetId, int amount) {
         super(
                 EntityPickupItemEvent.class,
+                ObjectiveType.COLLECT,
                 id,
                 CustomObjectFinder.getById(
                         targetId,

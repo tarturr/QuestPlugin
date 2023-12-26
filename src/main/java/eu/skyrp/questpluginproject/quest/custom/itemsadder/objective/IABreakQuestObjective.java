@@ -2,6 +2,7 @@ package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -12,7 +13,7 @@ public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlock
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public IABreakQuestObjective(String id, String targetId, int amount) {
-        super(CustomBlockBreakEvent.class, id, targetId, amount);
+        super(CustomBlockBreakEvent.class, ObjectiveType.BREAK, id, targetId, amount);
     }
 
     /**

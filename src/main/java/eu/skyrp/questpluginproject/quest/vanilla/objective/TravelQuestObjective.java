@@ -6,6 +6,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -23,7 +24,7 @@ public class TravelQuestObjective extends BaseQuestObjective<PlayerMoveEvent, Ob
      * @param regions Les régions qui devront être franchies par le joueur.
      */
     public TravelQuestObjective(String id, List<String> regions) {
-        super(PlayerMoveEvent.class, id, null, 0);
+        super(PlayerMoveEvent.class, ObjectiveType.TRAVEL, id, null, 0);
         this.regions = regions;
     }
 
