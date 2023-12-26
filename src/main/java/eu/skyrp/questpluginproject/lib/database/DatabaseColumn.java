@@ -2,11 +2,14 @@ package eu.skyrp.questpluginproject.lib.database;
 
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 
+import java.util.Optional;
+
 /**
  * Represents a column of a database table.
- * @param <T> The type of the primary key.
+ * @param <T> The child class.
+ * @param <U> The type of the primary key.
  */
-public interface DatabaseColumn<T> {
+public interface DatabaseColumn<T, U> {
 
     /**
      * Creates a new column instance in the database via the provided database using the {@link BaseDatabaseConnection}
@@ -32,11 +35,11 @@ public interface DatabaseColumn<T> {
     boolean update(BaseDatabaseConnection connection);
 
     /**
-     * Fetches an instance of the T class from the provided database using the {@link BaseDatabaseConnection} class.
+     * Fetches an instance of the child class from the provided database using the {@link BaseDatabaseConnection} class.
      * @param primaryKey The value of the primary key.
      * @param connection The provided database connection.
-     * @return true if the instance was successfully created, false otherwise.
+     * @return A new instance of the child class built with the query results.
      */
-    boolean fetchFromDatabase(T primaryKey, BaseDatabaseConnection connection);
+     Optional<T> fetchFromDatabase(U primaryKey, BaseDatabaseConnection connection);
 
 }
