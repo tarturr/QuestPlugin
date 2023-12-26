@@ -6,7 +6,7 @@ import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnectio
  * Represents a column of a database table which has a auto increment column as its primary key.
  * @see DatabaseColumn
  */
-public interface DatabaseColumnAutoIncrement extends DatabaseColumn<Integer> {
+public interface DatabaseColumnAutoIncrement<T> extends DatabaseColumn<T, Integer> {
 
     /**
      * Fetch the id of the current class from the provided database using the {@link BaseDatabaseConnection} class.
