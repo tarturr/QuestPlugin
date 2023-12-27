@@ -1,8 +1,9 @@
 package eu.skyrp.questpluginproject.quest.manager;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
-import eu.skyrp.questpluginproject.quest.common.mechanic.MechanicType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,11 +13,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 
+
 public class MechanicManager implements PropertyChangeListener {
 
     @Getter
+    @Setter
     @Accessors(fluent = true)
-    private final List<BaseMechanic<?>> mechanics;
+    private List<BaseMechanic<?>> mechanics;
     private int endedMechanics;
 
     private final PropertyChangeSupport support;
@@ -27,6 +30,10 @@ public class MechanicManager implements PropertyChangeListener {
         this.support = new PropertyChangeSupport(this);
 
         this.mechanics.forEach(mechanic -> mechanic.addPropertyChangeListener(this));
+    }
+
+    public MechanicManager() {
+        this(new ArrayList<>());
     }
 
     public static MechanicManager createFromConfigurationSection(String name, ConfigurationSection mechanicsSection) {
