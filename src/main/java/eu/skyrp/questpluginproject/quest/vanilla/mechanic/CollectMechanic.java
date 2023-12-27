@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.mechanic;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
-import eu.skyrp.questpluginproject.quest.common.mechanic.MechanicType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import eu.skyrp.questpluginproject.quest.vanilla.objective.CollectQuestObjective;
 import lombok.Builder;
 import lombok.Singular;

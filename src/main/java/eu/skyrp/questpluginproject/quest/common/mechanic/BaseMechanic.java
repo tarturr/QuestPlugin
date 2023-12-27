@@ -2,6 +2,7 @@ package eu.skyrp.questpluginproject.quest.common.mechanic;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.Accessors;

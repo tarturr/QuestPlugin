@@ -2,7 +2,7 @@ package eu.skyrp.questpluginproject.quest;
 
 import eu.skyrp.questpluginproject.quest.common.Quest;
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
-import eu.skyrp.questpluginproject.quest.common.QuestType;
+import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
 import lombok.*;

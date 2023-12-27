@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package eu.skyrp.questpluginproject.quest.common;
 
 import dev.lone.itemsadder.api.CustomStack;
+import eu.skyrp.questpluginproject.quest.common.types.QuestItemType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomItemNotFoundException;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.Material;

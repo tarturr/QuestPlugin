@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.custom.itemsadder.mechanic;
 
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
-import eu.skyrp.questpluginproject.quest.common.mechanic.MechanicType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import eu.skyrp.questpluginproject.quest.custom.itemsadder.objective.IABreakQuestObjective;
 import lombok.Builder;
 import lombok.Singular;
