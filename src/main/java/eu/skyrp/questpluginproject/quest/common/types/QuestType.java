@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.quest.common;
+package eu.skyrp.questpluginproject.quest.common.types;
 
 public enum QuestType {
     DAILY,

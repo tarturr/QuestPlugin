@@ -1,4 +1,4 @@
-package eu.skyrp.questpluginproject.quest.common;
+package eu.skyrp.questpluginproject.quest.common.types;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

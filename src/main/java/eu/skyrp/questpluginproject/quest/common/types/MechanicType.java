@@ -1,6 +1,7 @@
-package eu.skyrp.questpluginproject.quest.common.mechanic;
+package eu.skyrp.questpluginproject.quest.common.types;
 
 import eu.skyrp.questpluginproject.quest.common.QuestItem;
+import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
 import eu.skyrp.questpluginproject.quest.custom.itemsadder.mechanic.IABreakMechanic;
 import eu.skyrp.questpluginproject.quest.custom.itemsadder.mechanic.IACollectMechanic;
 import eu.skyrp.questpluginproject.quest.custom.itemsadder.mechanic.IAPlaceMechanic;
