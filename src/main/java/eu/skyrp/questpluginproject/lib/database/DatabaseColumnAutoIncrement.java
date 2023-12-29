@@ -3,6 +3,7 @@ package eu.skyrp.questpluginproject.lib.database;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.sql.PreparedStatement;
@@ -10,13 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Accessors(fluent = true)
 @NoArgsConstructor
 public abstract class DatabaseColumnAutoIncrement<T> implements DatabaseColumn<T, Integer> {
 
+    @Setter
     private String table;
 
     @Getter
-    @Accessors(fluent = true)
     private int columnId;
 
     protected DatabaseColumnAutoIncrement(String table) {

@@ -20,6 +20,7 @@ public class QuestDispatcher implements Dispatchable<Quest> {
             case WEEKLY -> new WeeklyQuest();
         };
 
+        quest.table("quest");
         quest.support(new PropertyChangeSupport(quest));
         return quest;
     }
