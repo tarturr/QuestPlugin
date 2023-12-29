@@ -10,6 +10,10 @@ import java.util.List;
 
 public class IAPlaceMechanic extends BaseMechanic<IAPlaceQuestObjective> {
 
+    public IAPlaceMechanic() {
+        super(MechanicType.PLACE);
+    }
+
     @Builder
     public IAPlaceMechanic(@Singular("objective") List<IAPlaceQuestObjective> objectives) {
         super(objectives, MechanicType.PLACE);

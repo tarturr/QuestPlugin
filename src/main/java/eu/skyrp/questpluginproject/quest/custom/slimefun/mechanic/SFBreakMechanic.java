@@ -10,6 +10,10 @@ import java.util.List;
 
 public class SFBreakMechanic extends BaseMechanic<SFBreakQuestObjective> {
 
+    public SFBreakMechanic() {
+        super(MechanicType.BREAK);
+    }
+
     @Builder
     public SFBreakMechanic(@Singular("objective") List<SFBreakQuestObjective> objectives) {
         super(objectives, MechanicType.BREAK);

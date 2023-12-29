@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -14,7 +14,11 @@ public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public SFPlaceQuestObjective(String id, String targetId, int amount) {
-        super(SlimefunBlockPlaceEvent.class, ObjectiveType.PLACE, id, targetId, amount);
+        super(SlimefunBlockPlaceEvent.class, MechanicType.PLACE, id, targetId, amount);
+    }
+
+    public SFPlaceQuestObjective() {
+        this(null, null, 0);
     }
 
     /**

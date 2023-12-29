@@ -10,6 +10,10 @@ import java.util.List;
 
 public class SFCollectMechanic extends BaseMechanic<SFCollectQuestObjective> {
 
+    public SFCollectMechanic() {
+        super(MechanicType.COLLECT);
+    }
+
     @Builder
     public SFCollectMechanic(@Singular("objective") List<SFCollectQuestObjective> objectives) {
         super(objectives, MechanicType.COLLECT);

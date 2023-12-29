@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -17,19 +17,11 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public SFCollectQuestObjective(String id, String targetId, int amount) {
-        super(
-                EntityPickupItemEvent.class,
-                ObjectiveType.COLLECT,
-                id,
-                CustomObjectFinder.getById(
-                        targetId,
-                        "SlimeFun",
-                        "sf",
-                        (item) -> SlimefunItem.getById(item) == null,
-                        SlimefunItem::getById
-                ),
-                amount
-        );
+        super(EntityPickupItemEvent.class, MechanicType.COLLECT, id, targetId == null ? null : itemFromString(targetId), amount);
+    }
+
+    public SFCollectQuestObjective() {
+        this(null, null, 0);
     }
 
     /**
@@ -50,5 +42,15 @@ public class SFCollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super.addPlayerToElem(player, item);
 
         return super.count() >= super.amount();
+    }
+
+    private static SlimefunItem itemFromString(String targetId) {
+        return CustomObjectFinder.getById(
+                targetId,
+                "SlimeFun",
+                "sf",
+                (item) -> SlimefunItem.getById(item) == null,
+                SlimefunItem::getById
+        );
     }
 }

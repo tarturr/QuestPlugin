@@ -8,6 +8,10 @@ import java.util.List;
 
 public class TravelMechanic extends BaseMechanic<TravelQuestObjective> {
 
+    public TravelMechanic() {
+        super(MechanicType.TRAVEL);
+    }
+
     public TravelMechanic(List<TravelQuestObjective> objectives) {
         super(objectives, MechanicType.TRAVEL);
     }

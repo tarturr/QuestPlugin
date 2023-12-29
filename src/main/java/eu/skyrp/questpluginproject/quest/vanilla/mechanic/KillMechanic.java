@@ -9,6 +9,11 @@ import lombok.Singular;
 import java.util.List;
 
 public class KillMechanic extends BaseMechanic<KillQuestObjective> {
+
+    public KillMechanic() {
+        super(MechanicType.KILL);
+    }
+
     @Builder
     public KillMechanic(@Singular("objective") List<KillQuestObjective> objectives) {
         super(objectives, MechanicType.KILL);

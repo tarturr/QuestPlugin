@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import lombok.Builder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -9,7 +9,11 @@ public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPla
 
     @Builder
     public PlaceQuestObjective(String id, String targetId, int amount) {
-        super(BlockPlaceEvent.class, ObjectiveType.PLACE, id, targetId, amount);
+        super(BlockPlaceEvent.class, MechanicType.PLACE, id, targetId, amount);
+    }
+
+    public PlaceQuestObjective() {
+        this(null, null, 0);
     }
 
     @Override

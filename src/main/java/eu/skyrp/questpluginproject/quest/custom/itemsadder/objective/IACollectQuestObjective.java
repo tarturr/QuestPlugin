@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.custom.itemsadder.objective;
 
 import dev.lone.itemsadder.api.CustomStack;
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import eu.skyrp.questpluginproject.quest.custom.common.CustomObjectFinder;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
 import org.bukkit.entity.Player;
@@ -17,19 +17,11 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public IACollectQuestObjective(String id, String targetId, int amount) {
-        super(
-                EntityPickupItemEvent.class,
-                ObjectiveType.COLLECT,
-                id,
-                CustomObjectFinder.getById(
-                        targetId,
-                        "ItemsAdder",
-                        "ia",
-                        CustomStack::isInRegistry,
-                        CustomStack::getInstance
-                ),
-                amount
-        );
+        super(EntityPickupItemEvent.class, MechanicType.COLLECT, id, targetId == null ? null : itemFromString(targetId), amount);
+    }
+
+    public IACollectQuestObjective() {
+        this(null, null, 0);
     }
 
     /**
@@ -50,5 +42,15 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
         super.addPlayerToElem(player, item);
 
         return super.count() >= super.amount();
+    }
+
+    private static CustomStack itemFromString(String targetId) {
+        return CustomObjectFinder.getById(
+                targetId,
+                "ItemsAdder",
+                "ia",
+                CustomStack::isInRegistry,
+                CustomStack::getInstance
+        );
     }
 }

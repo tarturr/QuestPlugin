@@ -1,6 +1,6 @@
 package eu.skyrp.questpluginproject.quest.custom.slimefun.objective;
 
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockBreakEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -14,7 +14,11 @@ public class SFBreakQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlo
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
     public SFBreakQuestObjective(String id, String targetId, int amount) {
-        super(SlimefunBlockBreakEvent.class, ObjectiveType.BREAK, id, targetId, amount);
+        super(SlimefunBlockBreakEvent.class, MechanicType.BREAK, id, targetId, amount);
+    }
+
+    public SFBreakQuestObjective() {
+        this(null, null, 0);
     }
 
     /**

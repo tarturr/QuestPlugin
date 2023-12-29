@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.common.objective.cache;
 
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -21,7 +21,7 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQue
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseItemQuestObjective(Class<T> eventType, ObjectiveType type, String id, U target, int amount) {
+    public BaseItemQuestObjective(Class<T> eventType, MechanicType type, String id, U target, int amount) {
         super(eventType, type, id, target, amount);
     }
 

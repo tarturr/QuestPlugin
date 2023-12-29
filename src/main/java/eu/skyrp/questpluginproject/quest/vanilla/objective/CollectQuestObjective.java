@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseItemQuestObjective;
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import lombok.Builder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,6 +9,10 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupItemEvent, Material> {
+
+    public CollectQuestObjective() {
+        this(null, null, 0);
+    }
 
     /**
      * Constructeur de la classe ItemStatisticQuestObjective.
@@ -19,7 +23,7 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
      */
     @Builder
     public CollectQuestObjective(String id, String targetId, int amount) {
-        super(EntityPickupItemEvent.class, ObjectiveType.COLLECT, id, Material.valueOf(targetId.toUpperCase()), amount);
+        super(EntityPickupItemEvent.class, MechanicType.COLLECT, id, materialFromString(targetId), amount);
 
         if (super.target() == null) {
             throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");
@@ -43,5 +47,11 @@ public class CollectQuestObjective extends BaseItemQuestObjective<EntityPickupIt
         super.addPlayerToElem(player, item);
 
         return super.count() >= super.amount();
+    }
+
+    private static Material materialFromString(String material) {
+        return material == null
+                ? Material.AIR
+                : Material.valueOf(material.toUpperCase());
     }
 }

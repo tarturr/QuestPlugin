@@ -10,6 +10,10 @@ import java.util.List;
 
 public class CollectMechanic extends BaseMechanic<CollectQuestObjective> {
 
+    public CollectMechanic() {
+        super(MechanicType.COLLECT);
+    }
+
     @Builder
     public CollectMechanic(@Singular("objective") List<CollectQuestObjective> objectives) {
         super(objectives, MechanicType.COLLECT);

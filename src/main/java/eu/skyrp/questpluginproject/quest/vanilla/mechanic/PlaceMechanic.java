@@ -10,6 +10,10 @@ import java.util.List;
 
 public class PlaceMechanic extends BaseMechanic<PlaceQuestObjective> {
 
+    public PlaceMechanic() {
+        super(MechanicType.PLACE);
+    }
+
     @Builder
     public PlaceMechanic(@Singular("objective") List<PlaceQuestObjective> objectives) {
         super(objectives, MechanicType.PLACE);

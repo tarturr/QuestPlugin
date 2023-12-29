@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -13,12 +13,12 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseVanillaBlockQuestObjective(Class<T> eventType, ObjectiveType type, String id, String targetId, int amount) {
-        super(eventType,type, id, Material.valueOf(targetId.toUpperCase()), amount);
+    public BaseVanillaBlockQuestObjective(Class<T> eventType, MechanicType type, String id, String targetId, int amount) {
+        this(eventType, type, id, materialFromString(targetId), amount);
+    }
 
-        if (super.target() == null) {
-            throw new IllegalArgumentException("The \"" + targetId + "\" item type could not be recognized.");
-        }
+    public BaseVanillaBlockQuestObjective(Class<T> eventType, MechanicType type, String id, Material target, int amount) {
+        super(eventType, type, id, target, amount);
     }
 
     /**
@@ -43,5 +43,11 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
         super.incrementCount();
 
         return super.count() >= super.amount();
+    }
+
+    private static Material materialFromString(String material) {
+        return material == null
+                ? null
+                : Material.valueOf(material.toUpperCase());
     }
 }

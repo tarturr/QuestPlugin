@@ -10,6 +10,10 @@ import java.util.List;
 
 public class IABreakMechanic extends BaseMechanic<IABreakQuestObjective> {
 
+    public IABreakMechanic() {
+        super(MechanicType.BREAK);
+    }
+
     @Builder
     public IABreakMechanic(@Singular("objective") List<IABreakQuestObjective> objectives) {
         super(objectives, MechanicType.BREAK);

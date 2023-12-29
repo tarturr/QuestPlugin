@@ -10,6 +10,10 @@ import java.util.List;
 
 public class ConnectMechanic extends BaseMechanic<ConnectQuestObjective> {
 
+    public ConnectMechanic() {
+        super(MechanicType.CONNECT);
+    }
+
     @Builder
     public ConnectMechanic(@Singular("objective") List<ConnectQuestObjective> objectives) {
         super(objectives, MechanicType.CONNECT);

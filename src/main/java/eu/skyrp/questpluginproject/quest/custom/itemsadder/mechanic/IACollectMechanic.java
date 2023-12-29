@@ -10,6 +10,10 @@ import java.util.List;
 
 public class IACollectMechanic extends BaseMechanic<IACollectQuestObjective> {
 
+    public IACollectMechanic() {
+        super(MechanicType.COLLECT);
+    }
+
     @Builder
     public IACollectMechanic(@Singular("objective") List<IACollectQuestObjective> objectives) {
         super(objectives, MechanicType.COLLECT);

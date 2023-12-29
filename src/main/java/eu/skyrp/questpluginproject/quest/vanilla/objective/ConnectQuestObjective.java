@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.quest.vanilla.objective;
 
 import eu.skyrp.questpluginproject.quest.common.objective.statistic.BaseStatisticQuestObjective;
-import eu.skyrp.questpluginproject.quest.common.types.ObjectiveType;
+import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
 import lombok.Builder;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -16,7 +16,11 @@ public class ConnectQuestObjective extends BaseStatisticQuestObjective<Player> {
      */
     @Builder
     public ConnectQuestObjective(String id, int amount) {
-        super(id, ObjectiveType.CONNECT, Statistic.PLAY_ONE_MINUTE, null, amount);
+        super(id, MechanicType.CONNECT, Statistic.PLAY_ONE_MINUTE, null, amount);
+    }
+
+    public ConnectQuestObjective() {
+        this(null, 0);
     }
 
 }

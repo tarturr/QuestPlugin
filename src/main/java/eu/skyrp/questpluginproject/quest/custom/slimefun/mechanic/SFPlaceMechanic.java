@@ -10,6 +10,10 @@ import java.util.List;
 
 public class SFPlaceMechanic extends BaseMechanic<SFPlaceQuestObjective> {
 
+    public SFPlaceMechanic() {
+        super(MechanicType.PLACE);
+    }
+
     @Builder
     public SFPlaceMechanic(@Singular("objective") List<SFPlaceQuestObjective> objectives) {
         super(objectives, MechanicType.PLACE);
