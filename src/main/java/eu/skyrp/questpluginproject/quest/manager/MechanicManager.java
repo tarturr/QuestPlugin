@@ -137,8 +137,7 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
      */
     @Override
     public Optional<MechanicManager> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
-        MechanicManager manager = new Initializer().init(primaryKey, connection);
-        return manager == null ? Optional.empty() : Optional.of(manager);
+        return Optional.ofNullable(new Initializer().init(primaryKey, connection));
     }
 
     @Override

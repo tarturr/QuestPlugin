@@ -172,7 +172,6 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
      */
     @Override
     public Optional<BaseQuestObjective<?, ?>> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
-        BaseQuestObjective<?, ?> result = new Initializer().init(primaryKey, connection);
-        return result == null ? Optional.empty() : Optional.of(result);
+        return Optional.ofNullable(new Initializer().init(primaryKey, connection));
     }
 }

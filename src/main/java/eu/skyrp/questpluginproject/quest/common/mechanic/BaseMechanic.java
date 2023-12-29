@@ -237,8 +237,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
      */
     @Override
     public Optional<BaseMechanic<?>> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
-        BaseMechanic<?> mechanic = new Initializer().init(primaryKey, connection);
-        return mechanic == null ? Optional.empty() : Optional.of(mechanic);
+        return Optional.ofNullable(new Initializer().init(primaryKey, connection));
     }
 
     @Override

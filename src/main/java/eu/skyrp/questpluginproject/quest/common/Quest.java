@@ -194,8 +194,7 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
      */
     @Override
     public Optional<Quest> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
-        Quest quest = new Quest.Initializer().init(primaryKey, connection);
-        return quest == null ? Optional.empty() : Optional.of(quest);
+        return Optional.ofNullable(new Quest.Initializer().init(primaryKey, connection));
     }
 
     public boolean hasNext() {
