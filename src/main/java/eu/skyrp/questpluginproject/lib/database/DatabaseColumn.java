@@ -15,9 +15,8 @@ public interface DatabaseColumn<T, U> {
      * Creates a new column instance in the database via the provided database using the {@link BaseDatabaseConnection}
      * class.
      * @param connection The provided database connection.
-     * @return true if the creation was successful, false otherwise.
      */
-    boolean createInDatabase(BaseDatabaseConnection connection);
+    void createInDatabase(BaseDatabaseConnection connection);
 
     /**
      * Checks if the current class exists in the provided database using the {@link BaseDatabaseConnection} class.
@@ -30,9 +29,8 @@ public interface DatabaseColumn<T, U> {
      * Updates the new values of the class fields in the provided database using the {@link BaseDatabaseConnection}
      * class.
      * @param connection The provided database connection.
-     * @return true if the update was successful, false otherwise.
      */
-    boolean update(BaseDatabaseConnection connection);
+    void update(BaseDatabaseConnection connection);
 
     /**
      * Fetches an instance of the child class from the provided database using the {@link BaseDatabaseConnection} class.
