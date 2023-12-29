@@ -2,7 +2,7 @@ package eu.skyrp.questpluginproject.quest;
 
 import eu.skyrp.questpluginproject.quest.common.Quest;
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
-import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
+
 import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
@@ -54,7 +54,7 @@ public class EventQuest extends TransientQuest {
         return this.start.getTime() - System.currentTimeMillis();
     }
 
-    public static class Initializer extends QuestInitializer {
+    public static class Initializer extends Quest.Initializer {
         @Override
         public Quest init(String id, ConfigurationSection section) {
             EventQuest quest = (EventQuest) super.init(id, section);

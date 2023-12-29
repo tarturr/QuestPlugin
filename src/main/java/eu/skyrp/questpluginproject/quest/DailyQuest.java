@@ -1,7 +1,8 @@
 package eu.skyrp.questpluginproject.quest;
 
+import eu.skyrp.questpluginproject.quest.common.Quest;
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
-import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
+
 import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
@@ -20,7 +21,7 @@ public class DailyQuest extends TransientQuest {
         super(QuestType.DAILY, id, name, lore, reward, mechanicManager, 1, new DailyQuest.Initializer());
     }
 
-    public static class Initializer extends QuestInitializer {}
+    public static class Initializer extends Quest.Initializer {}
 
     @Override
     public void onQuestEnds(Player player) {
