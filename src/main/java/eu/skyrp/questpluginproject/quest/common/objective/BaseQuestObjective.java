@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.objective;
 
+import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.dispatcher.QuestObjectiveDispatcher;
 import eu.skyrp.questpluginproject.quest.common.init.DatabaseInitializable;
@@ -17,6 +18,7 @@ import java.beans.PropertyChangeSupport;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * Classe qui représente un objectif de quête basique.
@@ -26,7 +28,7 @@ import java.sql.SQLException;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public abstract class BaseQuestObjective<T extends Event, U> implements Listener, EventExecutor {
+public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseColumnAutoIncrement<BaseQuestObjective<?, ?>> implements Listener, EventExecutor {
 
     private final Class<T> eventType;
     private final MechanicType type;
@@ -47,6 +49,7 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
      * @param amount L'objectif à atteindre sous forme de chiffre
      */
     public BaseQuestObjective(Class<T> eventType, MechanicType type, String id, U target, int amount) {
+        super("objective");
         this.eventType = eventType;
         this.type = type;
 
@@ -67,7 +70,7 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
                 PreparedStatement statement = connection.get().prepareStatement("""
                     SELECT * FROM objective
                     WHERE id = ?
-                    """.stripIndent());
+                    """);
 
                 statement.setInt(1, id);
 
@@ -107,8 +110,69 @@ public abstract class BaseQuestObjective<T extends Event, U> implements Listener
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void execute(@NotNull Listener listener, @NotNull Event event) {
         this.onEvent((T) event);
     }
 
+    /**
+     * Creates a new column instance in the database via the provided database using the {@link BaseDatabaseConnection}
+     * class.
+     *
+     * @param connection The provided database connection.
+     */
+    @Override
+    protected void createInDatabaseImpl(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    INSERT INTO objective (type, amount, count)
+                    VALUES (?, ?, ?)
+                    """);
+
+            statement.setString(1, this.type.toString());
+            statement.setInt(2, this.amount);
+            statement.setInt(3, this.count);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Updates the new values of the class fields in the provided database using the {@link BaseDatabaseConnection}
+     * class.
+     *
+     * @param connection The provided database connection.
+     */
+    @Override
+    public void update(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    UPDATE objective
+                    SET amount = ?,
+                        count = ?
+                    WHERE id = ?
+                    """);
+
+            statement.setInt(1, this.amount);
+            statement.setInt(2, this.count);
+            statement.setInt(3, super.columnId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Fetches an instance of the child class from the provided database using the {@link BaseDatabaseConnection} class.
+     *
+     * @param primaryKey The value of the primary key.
+     * @param connection The provided database connection.
+     * @return A new instance of the child class built with the query results.
+     */
+    @Override
+    public Optional<BaseQuestObjective<?, ?>> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
+        BaseQuestObjective<?, ?> result = new Initializer().init(primaryKey, connection);
+        return result == null ? Optional.empty() : Optional.of(result);
+    }
 }

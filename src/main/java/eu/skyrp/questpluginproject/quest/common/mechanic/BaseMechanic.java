@@ -1,9 +1,11 @@
 package eu.skyrp.questpluginproject.quest.common.mechanic;
 
+import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.QuestItem;
 import eu.skyrp.questpluginproject.quest.common.dispatcher.MechanicDispatcher;
-import eu.skyrp.questpluginproject.quest.common.init.Initializable;
+import eu.skyrp.questpluginproject.quest.common.init.ConfigurationInitializable;
+import eu.skyrp.questpluginproject.quest.common.init.DatabaseInitializable;
 import eu.skyrp.questpluginproject.quest.common.objective.BaseQuestObjective;
 import eu.skyrp.questpluginproject.quest.common.objective.cache.BaseBlockQuestObjective;
 import eu.skyrp.questpluginproject.quest.common.types.MechanicType;
@@ -39,9 +41,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Accessors(fluent = true)
-public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implements PropertyChangeListener {
+public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends DatabaseColumnAutoIncrement<BaseMechanic<?>> implements PropertyChangeListener {
     @Getter
     @Singular("objective")
     private final List<T> objectives;
@@ -59,6 +62,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
     }
 
     public BaseMechanic(List<T> objectives, MechanicType type) {
+        super("mechanic");
         this.objectives = objectives;
         this.type = type;
         this.endedObjectives = 0;
@@ -67,7 +71,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
         this.objectives.forEach(objective -> objective.endQuestSupport().addPropertyChangeListener(this));
     }
 
-    public static class Initializer implements Initializable<BaseMechanic<?>[]> {
+    public static class Initializer implements ConfigurationInitializable<BaseMechanic<?>[]>, DatabaseInitializable<BaseMechanic<?>> {
         @Override
         public BaseMechanic<?>[] init(String id, ConfigurationSection section) {
             return switch (MechanicType.valueOf(section.getName().toUpperCase())) {
@@ -153,28 +157,26 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
         }
 
         @Override
-        public BaseMechanic<?>[] init(int id, BaseDatabaseConnection connection) {
+        public BaseMechanic<?> init(int id, BaseDatabaseConnection connection) {
             try {
                 PreparedStatement statement = connection.get().prepareStatement("""
                         SELECT * FROM mechanic
                         WHERE id = ?
-                        """.stripIndent());
+                        """);
 
                 statement.setInt(1, id);
 
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    return new BaseMechanic[] {
-                            new MechanicDispatcher().dispatch(result.getString(3))
-                                    .endedObjectives(result.getInt(4))
-                                    .objectives(
-                                            BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
-                                                    .stream()
-                                                    .map(objectiveId -> new BaseQuestObjective.Initializer().init(objectiveId, connection))
-                                                    .toList()
-                                    )
-                    };
+                    return new MechanicDispatcher().dispatch(result.getString(3))
+                            .endedObjectives(result.getInt(4))
+                            .objectives(
+                                    BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
+                                            .stream()
+                                            .map(objectiveId -> new BaseQuestObjective.Initializer().init(objectiveId, connection))
+                                            .toList()
+                            );
                 }
 
                 return null;
@@ -182,6 +184,61 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> implement
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    protected void createInDatabaseImpl(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    INSERT INTO mechanic (objectives_id, type, ended_objectives)
+                    VALUES (?, ?, ?)
+                    """);
+
+            statement.setString(1, DatabaseColumnAutoIncrement.getIdsToString(this.objectives));
+            statement.setString(2, this.type.toString());
+            statement.setInt(3, this.endedObjectives);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Updates the new values of the class fields in the provided database using the {@link BaseDatabaseConnection}
+     * class.
+     *
+     * @param connection The provided database connection.
+     */
+    @Override
+    public void update(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    UPDATE mechanic
+                    SET objectives_id = ?,
+                        ended_objectived = ?
+                    WHERE id = ?
+                    """);
+
+            statement.setString(1, DatabaseColumnAutoIncrement.getIdsToString(this.objectives));
+            statement.setInt(2, this.endedObjectives);
+            statement.setInt(3, super.columnId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Fetches an instance of the child class from the provided database using the {@link BaseDatabaseConnection} class.
+     *
+     * @param primaryKey The value of the primary key.
+     * @param connection The provided database connection.
+     * @return A new instance of the child class built with the query results.
+     */
+    @Override
+    public Optional<BaseMechanic<?>> fetchFromDatabase(Integer primaryKey, BaseDatabaseConnection connection) {
+        BaseMechanic<?> mechanic = new Initializer().init(primaryKey, connection);
+        return mechanic == null ? Optional.empty() : Optional.of(mechanic);
     }
 
     @Override

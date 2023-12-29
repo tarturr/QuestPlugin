@@ -1,8 +1,9 @@
 package eu.skyrp.questpluginproject.quest.common;
 
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumn;
+import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
-import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.milkbowl.vault.economy.Economy;
@@ -81,11 +82,21 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      * class.
      *
      * @param connection The provided database connection.
-     * @return true if the creation was successful, false otherwise.
      */
     @Override
-    public boolean createInDatabase(BaseDatabaseConnection connection) {
-        return false;
+    public void createInDatabase(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    INSERT INTO player_quests (uuid, quests_id)
+                    VALUES (?, ?)
+                    """);
+
+            statement.setString(1, this.uuid.toString());
+            statement.setString(2, DatabaseColumnAutoIncrement.getIdsToString(this.quests));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -96,7 +107,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      */
     @Override
     public boolean existsInDatabase(BaseDatabaseConnection connection) {
-        return false;
+        return this.fetchFromDatabase(uuid.toString(), connection).isPresent();
     }
 
     /**
@@ -104,11 +115,22 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      * class.
      *
      * @param connection The provided database connection.
-     * @return true if the update was successful, false otherwise.
      */
     @Override
-    public boolean update(BaseDatabaseConnection connection) {
-        return false;
+    public void update(BaseDatabaseConnection connection) {
+        try {
+            PreparedStatement statement = connection.get().prepareStatement("""
+                    UPDATE player_quests
+                    SET quests_id = ?
+                    WHERE uuid = ?
+                    """);
+
+            statement.setString(1, DatabaseColumnAutoIncrement.getIdsToString(this.quests));
+            statement.setString(2, this.uuid.toString());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -124,7 +146,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
             PreparedStatement statement = connection.get().prepareStatement("""
                     SELECT * FROM player_quests
                     WHERE uuid = ?
-            """.stripIndent());
+            """);
 
             statement.setString(1, primaryKey);
 
@@ -135,7 +157,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
                         UUID.fromString(primaryKey),
                         BaseDatabaseConnection.fetchIntegerListFromString(result.getString(1))
                                 .stream()
-                                .map(id -> new QuestInitializer().init(id, connection))
+                                .map(id -> new Quest.Initializer().init(id, connection))
                                 .toList()
                 ));
             }
