@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
 import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
 import lombok.Getter;
@@ -19,13 +20,13 @@ public abstract class TransientQuest extends Quest {
 
     private Date end;
 
-    public TransientQuest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, Date end) {
-        super(type, id, name, lore, reward, mechanicManager);
+    public TransientQuest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, Date end, QuestInitializer initializer) {
+        super(type, id, name, lore, reward, mechanicManager, initializer);
         this.end = end;
     }
 
-    public TransientQuest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, int durationInDays) {
-        this(type, id, name, lore, reward, mechanicManager, new Date(System.currentTimeMillis() + (long) durationInDays * 24 * 3600 * 1000));
+    public TransientQuest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, int durationInDays, QuestInitializer initializer) {
+        this(type, id, name, lore, reward, mechanicManager, new Date(System.currentTimeMillis() + (long) durationInDays * 24 * 3600 * 1000), initializer);
     }
 
     public void reload(Player player) {

@@ -2,7 +2,7 @@ package eu.skyrp.questpluginproject.quest.common;
 
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumn;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
-import eu.skyrp.questpluginproject.quest.manager.QuestManager;
+import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.milkbowl.vault.economy.Economy;
@@ -135,7 +135,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
                         UUID.fromString(primaryKey),
                         BaseDatabaseConnection.fetchIntegerListFromString(result.getString(1))
                                 .stream()
-                                .map(id -> QuestManager.init(id, connection))
+                                .map(id -> new QuestInitializer().init(id, connection))
                                 .toList()
                 ));
             }

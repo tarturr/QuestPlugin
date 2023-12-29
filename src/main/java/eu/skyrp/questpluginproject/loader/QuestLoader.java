@@ -1,7 +1,7 @@
 package eu.skyrp.questpluginproject.loader;
 
 import eu.skyrp.questpluginproject.quest.common.Quest;
-import eu.skyrp.questpluginproject.quest.manager.QuestManager;
+import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -55,7 +55,7 @@ public class QuestLoader {
         }
 
         YamlConfiguration conf = possibleConf.get();
-        return Optional.of(QuestManager.init(conf));
+        return Optional.of(new QuestInitializer().init(conf));
     }
 
 }

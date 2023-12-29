@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.quest.common.init.ConfigurationInitializable;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.milkbowl.vault.economy.Economy;
@@ -31,6 +32,41 @@ public class QuestReward {
         this.commands = commands;
     }
 
+    public static class Initializer implements ConfigurationInitializable<QuestReward> {
+        @Override
+        public QuestReward init(String id, ConfigurationSection section) {
+            if (section == null) {
+                return new QuestReward();
+            }
+
+            ConfigurationSection itemSection = section.getConfigurationSection("items");
+
+            List<QuestItem> items = new ArrayList<>();
+            float experience = (float) section.getDouble("xp", 0.0);
+            double money = section.getDouble("money", 0.0);
+            List<String> commands = section.getStringList("money");
+
+            boolean allNull = true;
+
+            if (itemSection != null) {
+                allNull = false;
+                itemSection.getKeys(false)
+                        .forEach(childSectionName -> items.add(new QuestItem.Initializer().init(id, Objects.requireNonNull(itemSection.getConfigurationSection(childSectionName)))));
+            }
+
+            allNull = allNull && experience <= 0.0;
+            allNull = allNull && money <= 0.0;
+            allNull = allNull && commands.isEmpty();
+
+            if (allNull) {
+                throw new IllegalStateException("[QuestPlugin] No chield field has been found for the \"rewards\" field " +
+                        "in the \"" + id + "\" quest configuration file.");
+            }
+
+            return new QuestReward(items, experience, money, commands);
+        }
+    }
+
     public void giveToPlayer(Player player) {
         this.giveEconomy(player);
         player.sendExperienceChange(this.experience);
@@ -59,38 +95,6 @@ public class QuestReward {
     private void giveItems(Player player) {
         Inventory inventory = player.getInventory();
         this.items.forEach(item -> inventory.addItem(item.getItemStack()));
-    }
-
-    public static QuestReward createFromConfigurationSection(String name, ConfigurationSection section) {
-        if (section == null) {
-            return new QuestReward();
-        }
-
-        ConfigurationSection itemSection = section.getConfigurationSection("items");
-
-        List<QuestItem> items = new ArrayList<>();
-        float experience = (float) section.getDouble("xp", 0.0);
-        double money = section.getDouble("money", 0.0);
-        List<String> commands = section.getStringList("money");
-
-        boolean allNull = true;
-
-        if (itemSection != null) {
-            allNull = false;
-            itemSection.getKeys(false)
-                    .forEach(childSectionName -> items.add(QuestItem.createFromConfigurationSection(name, Objects.requireNonNull(itemSection.getConfigurationSection(childSectionName)))));
-        }
-
-        allNull = allNull && experience <= 0.0;
-        allNull = allNull && money <= 0.0;
-        allNull = allNull && commands.isEmpty();
-
-        if (allNull) {
-            throw new IllegalStateException("[QuestPlugin] No chield field has been found for the \"rewards\" field " +
-                    "in the \"" + name + "\" quest configuration file.");
-        }
-
-        return new QuestReward(items, experience, money, commands);
     }
 
     @Override

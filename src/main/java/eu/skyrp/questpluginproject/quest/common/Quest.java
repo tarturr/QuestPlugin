@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
 import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
 import lombok.AccessLevel;
@@ -7,15 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -35,13 +33,14 @@ public abstract class Quest implements PropertyChangeListener {
     @Setter(AccessLevel.NONE)
     private MechanicManager mechanicManager;
 
+    private QuestInitializer initializer;
     private PropertyChangeSupport support;
 
-    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager) {
-        this(type, id, name, lore, reward, mechanicManager, (String) null);
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, QuestInitializer initializer) {
+        this(type, id, name, lore, reward, mechanicManager, (String) null, initializer);
     }
 
-    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, String nextId) {
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, String nextId, QuestInitializer initializer) {
         this.id = id;
         this.state = QuestState.NOT_STARTED;
 
@@ -53,22 +52,11 @@ public abstract class Quest implements PropertyChangeListener {
         this.mechanicManager.addPropertyChangeListener(this);
         this.nextId = nextId;
         this.support = new PropertyChangeSupport(this);
+        this.initializer = initializer;
     }
 
-    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, Quest next) {
-        this(type, id, name, lore, reward, mechanicManager, next.id());
-    }
-
-    protected static void initQuestFromConfiguration(Quest quest, YamlConfiguration conf) {
-        ConfigurationSection section = Objects.requireNonNull(conf.getConfigurationSection("quest"));
-
-        quest.id(Objects.requireNonNull(section.getString("id")))
-                .type(QuestType.valueOf(Objects.requireNonNull(section.getString("type")).toUpperCase()))
-                .name(Objects.requireNonNull(section.getString("name")))
-                .lore(section.getStringList("lore"))
-                .reward(QuestReward.createFromConfigurationSection(conf.getCurrentPath(), section.getConfigurationSection("rewards")))
-                .mechanicManager(MechanicManager.createFromConfigurationSection(conf.getCurrentPath(), Objects.requireNonNull(conf.getConfigurationSection("mechanics"))))
-                .support(new PropertyChangeSupport(quest));
+    public Quest(QuestType type, String id, String name, List<String> lore, QuestReward reward, MechanicManager mechanicManager, Quest next, QuestInitializer initializer) {
+        this(type, id, name, lore, reward, mechanicManager, next.id(), initializer);
     }
 
     public abstract void onQuestEnds(Player player);

@@ -2,12 +2,13 @@ package eu.skyrp.questpluginproject.quest;
 
 import eu.skyrp.questpluginproject.quest.common.Quest;
 import eu.skyrp.questpluginproject.quest.common.QuestReward;
+import eu.skyrp.questpluginproject.quest.common.init.QuestInitializer;
 import eu.skyrp.questpluginproject.quest.common.types.QuestType;
 import eu.skyrp.questpluginproject.quest.common.TransientQuest;
 import eu.skyrp.questpluginproject.quest.manager.MechanicManager;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.text.ParseException;
@@ -27,7 +28,7 @@ public class EventQuest extends TransientQuest {
 
     @Builder
     public EventQuest(String id, String name, @Singular("descriptionLine") List<String> lore, QuestReward reward, MechanicManager mechanicManager, Date start, Date end, int replayable) {
-        super(QuestType.EVENT, id, name, lore, reward, mechanicManager, end);
+        super(QuestType.EVENT, id, name, lore, reward, mechanicManager, end, new EventQuest.Initializer());
         this.start = start;
         this.replayable = replayable;
     }
@@ -53,22 +54,24 @@ public class EventQuest extends TransientQuest {
         return this.start.getTime() - System.currentTimeMillis();
     }
 
-    public static EventQuest createFromConfiguration(String name, YamlConfiguration conf) {
-        EventQuest quest = new EventQuest();
-        Quest.initQuestFromConfiguration(quest, conf);
+    public static class Initializer extends QuestInitializer {
+        @Override
+        public Quest init(String id, ConfigurationSection section) {
+            EventQuest quest = (EventQuest) super.init(id, section);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-        try {
-            quest.start(format.parse(Objects.requireNonNull(conf.getString("quest.start"))));
-            quest.end(format.parse(Objects.requireNonNull(conf.getString("quest.end"))));
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("[QuestPlugin] The start or ending dates of the \"" + name + "\" are " +
-                    "not formatted correctly. Please consider the use of the \"yyyy-MM-dd HH:mm\" date format.");
+            try {
+                quest.start(format.parse(Objects.requireNonNull(section.getString("start"))));
+                quest.end(format.parse(Objects.requireNonNull(section.getString("end"))));
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("[QuestPlugin] The start or ending dates of the \"" + id + "\" are " +
+                        "not formatted correctly. Please consider the use of the \"yyyy-MM-dd HH:mm\" date format.");
+            }
+
+            quest.replayable(section.getInt("replayable", 0));
+            quest.nextId(section.getString("next"));
+            return quest;
         }
-
-        quest.replayable(conf.getInt("quest.replayable", 0));
-        quest.nextId(conf.getString("quest.next"));
-        return quest;
     }
 }
