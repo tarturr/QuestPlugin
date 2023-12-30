@@ -1,13 +1,16 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import com.earth2me.essentials.api.Economy;
+import com.earth2me.essentials.api.NoLoanPermittedException;
+import com.earth2me.essentials.api.UserDoesNotExistException;
 import eu.skyrp.questpluginproject.quest.common.init.ConfigurationInitializable;
-import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.milkbowl.vault.economy.Economy;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Accessors(fluent = true)
@@ -17,9 +20,6 @@ public class QuestReward {
     private final float experience;
     private final double money;
     private final List<String> commands;
-
-    @Setter
-    private Economy economy;
 
     public QuestReward() {
         this(null, 0.0f, 0.0f, null);
@@ -77,15 +77,11 @@ public class QuestReward {
     }
 
     private void giveEconomy(Player player) {
-        if (this.economy == null) {
-            throw new IllegalStateException("[QuestPlugin] The vault economy instance cannot be null.");
+        try {
+            Economy.add(player.getUniqueId(), new BigDecimal(this.money));
+        } catch (NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException e) {
+            throw new RuntimeException(e);
         }
-
-        if (!this.economy.hasAccount(player)) {
-            this.economy.createPlayerAccount(player);
-        }
-
-        this.economy.depositPlayer(player, this.money);
     }
 
     private void executeCommands(Player player) {
