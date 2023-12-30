@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.dispatcher.QuestDispatcher;
@@ -101,6 +102,8 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
 
         @Override
         public Quest init(int id, BaseDatabaseConnection connection) {
+            QuestPlugin.logger().info("Quest query with id: " + id);
+
             try {
                 PreparedStatement statement = connection.get().prepareStatement("""
                         SELECT * FROM quest
@@ -115,9 +118,9 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
                 if (result.next()) {
                     Quest quest = this.dispatcher.dispatch(result.getString(4));
 
-                    quest.id(result.getString(2))
+                    return quest.id(result.getString(2))
                             .state(QuestState.valueOf(result.getString(3)))
-                            .mechanicManager(new MechanicManager.Initializer().init(result.getInt(5), connection));
+                            .mechanicManager(Optional.ofNullable(new MechanicManager.Initializer().init(result.getInt(5), connection)).orElseThrow());
                 }
             } catch (SQLException e) {
                 throw new IllegalArgumentException("[QuestPlugin] An error has occurred while fetching the quest with " +
