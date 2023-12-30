@@ -6,6 +6,7 @@ description: Plugin de quetes.
 depend:
   - WorldGuard
   - Vault
+  - Essentials
 commands:
   quest:
     description: 'Get informations on your quest.'
