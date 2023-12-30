@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumn;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
@@ -118,20 +119,24 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      */
     @Override
     public void update(BaseDatabaseConnection connection) {
-        this.quests.forEach(quest -> quest.update(connection));
+        if (!this.existsInDatabase(connection)) {
+            this.createInDatabase(connection);
+        } else {
+            this.quests.forEach(quest -> quest.update(connection));
 
-        try {
-            PreparedStatement statement = connection.get().prepareStatement("""
+            try {
+                PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE player_quests
                     SET quests_id = ?
                     WHERE uuid = ?
                     """);
 
-            statement.setString(1, DatabaseColumnAutoIncrement.getIdsToString(this.quests));
-            statement.setString(2, this.uuid.toString());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+                statement.setString(1, DatabaseColumnAutoIncrement.getIdsToString(this.quests));
+                statement.setString(2, this.uuid.toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -144,6 +149,8 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      */
     @Override
     public Optional<PlayerQuests> fetchFromDatabase(String primaryKey, BaseDatabaseConnection connection) {
+        QuestPlugin.logger().info("Player quests query with id: " + primaryKey);
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     SELECT * FROM player_quests
@@ -159,7 +166,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
                         UUID.fromString(primaryKey),
                         BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
                                 .stream()
-                                .map(id -> new Quest.Initializer().init(id, connection))
+                                .map(id -> Optional.ofNullable(new Quest.Initializer().init(id, connection)).orElseThrow())
                                 .toList()
                 ));
             }
