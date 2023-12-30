@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.manager;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.init.Initializable;
@@ -17,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager> implements PropertyChangeListener {
@@ -53,7 +55,7 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
 
             for (String mechanicName : section.getKeys(false)) {
                 ConfigurationSection currentMechanicSection = Objects.requireNonNull(section.getConfigurationSection(mechanicName));
-                mechanics.addAll(Arrays.stream(new BaseMechanic.Initializer().init(id, currentMechanicSection)).toList());
+                mechanics.addAll(new BaseMechanic.Initializer().init(id, currentMechanicSection));
             }
 
             return new MechanicManager(mechanics);
@@ -61,6 +63,8 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
 
         @Override
         public MechanicManager init(int id, BaseDatabaseConnection connection) {
+            QuestPlugin.logger().info("Mechanic manager query with id: " + id);
+
             try {
                 PreparedStatement statement = connection.get().prepareStatement("""
                         SELECT * FROM mechanic_manager
@@ -73,9 +77,12 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
 
                 if (result.next()) {
                     MechanicManager manager = new MechanicManager(result.getInt(3));
-
-                    BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
-                            .forEach(mechanicId -> new BaseMechanic.Initializer().init(mechanicId, connection));
+                    manager.mechanics(
+                            BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
+                                    .stream()
+                                    .map(mechanicId -> Optional.ofNullable(new BaseMechanic.Initializer().init(mechanicId, connection)).orElseThrow())
+                                    .collect(Collectors.toList())
+                    );
 
                     return manager;
                 }

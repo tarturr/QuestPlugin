@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.mechanic;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.QuestItem;
@@ -38,10 +39,8 @@ import java.beans.PropertyChangeSupport;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Accessors(fluent = true)
 public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends DatabaseColumnAutoIncrement<BaseMechanic<?>> implements PropertyChangeListener {
@@ -71,10 +70,10 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
         this.objectives.forEach(objective -> objective.endQuestSupport().addPropertyChangeListener(this));
     }
 
-    public static class Initializer implements ConfigurationInitializable<BaseMechanic<?>[]>, DatabaseInitializable<BaseMechanic<?>> {
+    public static class Initializer implements ConfigurationInitializable<List<BaseMechanic<?>>>, DatabaseInitializable<BaseMechanic<?>> {
         @Override
-        public BaseMechanic<?>[] init(String id, ConfigurationSection section) {
-            return switch (MechanicType.valueOf(section.getName().toUpperCase())) {
+        public List<BaseMechanic<?>> init(String id, ConfigurationSection section) {
+            return (switch (MechanicType.valueOf(section.getName().toUpperCase())) {
                 case BREAK -> {
                     BreakMechanic vanilla = new BreakMechanic();
                     IABreakMechanic itemsAdder = new IABreakMechanic();
@@ -90,7 +89,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         }
                     }
 
-                    yield new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
+                    yield List.of(vanilla, itemsAdder, slimeFun);
                 }
                 case COLLECT -> {
                     CollectMechanic vanilla = new CollectMechanic();
@@ -107,7 +106,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         }
                     }
 
-                    yield new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
+                    yield List.of(vanilla, itemsAdder, slimeFun);
                 }
                 case CONNECT -> {
                     ConnectMechanic mechanic = new ConnectMechanic();
@@ -115,7 +114,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                     int time = section.getInt("time");
                     mechanic.objectives().add(new ConnectQuestObjective(section.getName(), time));
 
-                    yield new ConnectMechanic[] { mechanic };
+                    yield List.of(mechanic);
                 }
                 case KILL -> {
                     KillMechanic mechanic = new KillMechanic();
@@ -123,7 +122,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                     int amount = section.getInt("amount");
                     mechanic.objectives().add(new KillQuestObjective(section.getName(), Objects.requireNonNull(section.getString("type")), amount));
 
-                    yield new KillMechanic[] { mechanic };
+                    yield List.of(mechanic);
                 }
                 case PLACE -> {
                     PlaceMechanic vanilla = new PlaceMechanic();
@@ -140,7 +139,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         }
                     }
 
-                    yield new BaseMechanic[] { vanilla, itemsAdder, slimeFun };
+                    yield List.of(vanilla, itemsAdder, slimeFun);
                 }
                 case TRAVEL -> {
                     TravelMechanic mechanic = new TravelMechanic();
@@ -149,15 +148,19 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                     List<String> regionIds = Objects.requireNonNull(parentSection.getStringList(section.getName()));
                     mechanic.objectives().add(new TravelQuestObjective(section.getName(), regionIds));
 
-                    yield new TravelMechanic[] { mechanic };
+                    yield List.of(mechanic);
                 }
                 default -> throw new NotImplementedException("[QuestPlugin] You cannot define a category other than " +
                         "the expected ones!");
-            };
+            }).stream()
+                    .filter(mechanic -> mechanic.objectives().size() > 0)
+                    .collect(Collectors.toList());
         }
 
         @Override
         public BaseMechanic<?> init(int id, BaseDatabaseConnection connection) {
+            QuestPlugin.logger().info("Mechanic query with id: " + id);
+
             try {
                 PreparedStatement statement = connection.get().prepareStatement("""
                         SELECT * FROM mechanic
@@ -174,7 +177,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                             .objectives(
                                     BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
                                             .stream()
-                                            .map(objectiveId -> new BaseQuestObjective.Initializer().init(objectiveId, connection))
+                                            .map(objectiveId -> Optional.ofNullable(new BaseQuestObjective.Initializer().init(objectiveId, connection)).orElseThrow())
                                             .toList()
                             );
                 }
