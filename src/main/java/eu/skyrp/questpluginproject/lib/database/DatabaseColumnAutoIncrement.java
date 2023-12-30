@@ -27,6 +27,7 @@ public abstract class DatabaseColumnAutoIncrement<T> implements DatabaseColumn<T
     }
 
     protected abstract void createInDatabaseImpl(BaseDatabaseConnection connection);
+    protected abstract void updateImpl(BaseDatabaseConnection connection);
 
     /**
      * Creates a new column instance in the database via the provided database using the {@link BaseDatabaseConnection}
@@ -47,6 +48,15 @@ public abstract class DatabaseColumnAutoIncrement<T> implements DatabaseColumn<T
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public final void update(BaseDatabaseConnection connection) {
+        if (this.existsInDatabase(connection)) {
+            this.updateImpl(connection);
+        } else {
+            this.createInDatabase(connection);
         }
     }
 
