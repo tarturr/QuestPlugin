@@ -62,7 +62,7 @@ public abstract class DatabaseColumnAutoIncrement<T> implements DatabaseColumn<T
 
     @Override
     public boolean existsInDatabase(BaseDatabaseConnection connection) {
-        return this.columnId == -1;
+        return this.columnId != -1;
     }
 
     public static String getIdsToString(List<? extends DatabaseColumnAutoIncrement<?>> list) {
