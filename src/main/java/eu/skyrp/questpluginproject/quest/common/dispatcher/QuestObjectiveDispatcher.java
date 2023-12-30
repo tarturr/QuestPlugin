@@ -14,7 +14,7 @@ public class QuestObjectiveDispatcher implements Dispatchable<BaseQuestObjective
 
     @Override
     public BaseQuestObjective<?, ?> dispatch(String str) {
-        return switch (MechanicType.valueOf(str)) {
+        return switch (MechanicType.valueOf(str.toUpperCase())) {
             case BREAK -> new BreakQuestObjective();
             case IA_BREAK -> new IABreakQuestObjective();
             case SF_BREAK -> new SFBreakQuestObjective();

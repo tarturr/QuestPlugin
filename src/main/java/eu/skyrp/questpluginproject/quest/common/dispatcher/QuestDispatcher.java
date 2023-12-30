@@ -13,11 +13,11 @@ public class QuestDispatcher implements Dispatchable<Quest> {
 
     @Override
     public Quest dispatch(String str) {
-        Quest quest = switch (QuestType.valueOf(str)) {
-            case EVENT -> new EventQuest();
-            case DAILY -> new DailyQuest();
-            case ONLY_ONCE -> new OnlyOnceQuest();
-            case WEEKLY -> new WeeklyQuest();
+        Quest quest = switch (QuestType.valueOf(str.toUpperCase())) {
+            case EVENT -> new EventQuest().initializer(new EventQuest.Initializer());
+            case DAILY -> new DailyQuest().initializer(new DailyQuest.Initializer());
+            case ONLY_ONCE -> new OnlyOnceQuest().initializer(new OnlyOnceQuest.Initializer());
+            case WEEKLY -> new WeeklyQuest().initializer(new WeeklyQuest.Initializer());
         };
 
         quest.table("quest");

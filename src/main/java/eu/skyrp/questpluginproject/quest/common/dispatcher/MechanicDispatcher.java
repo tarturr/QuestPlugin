@@ -14,7 +14,7 @@ public class MechanicDispatcher implements Dispatchable<BaseMechanic<?>> {
 
     @Override
     public BaseMechanic<?> dispatch(String str) {
-        return switch (MechanicType.valueOf(str)) {
+        return switch (MechanicType.valueOf(str.toUpperCase())) {
             case BREAK -> new BreakMechanic();
             case IA_BREAK -> new IABreakMechanic();
             case SF_BREAK -> new SFBreakMechanic();
