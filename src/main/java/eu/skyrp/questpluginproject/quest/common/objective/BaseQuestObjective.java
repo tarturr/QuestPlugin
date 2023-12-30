@@ -145,7 +145,7 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
      * @param connection The provided database connection.
      */
     @Override
-    public void update(BaseDatabaseConnection connection) {
+    protected void updateImpl(BaseDatabaseConnection connection) {
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE objective

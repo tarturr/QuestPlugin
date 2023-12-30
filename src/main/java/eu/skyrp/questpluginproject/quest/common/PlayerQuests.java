@@ -6,7 +6,6 @@ import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnectio
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -70,10 +69,9 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
         this.support.addPropertyChangeListener(listener);
     }
 
-    public void registerAllQuests(JavaPlugin main, Economy economy) {
+    public void registerAllQuests(JavaPlugin main) {
         this.quests.forEach(quest -> {
             quest.mechanicManager().registerAllMechanics(main);
-            quest.reward().economy(economy);
         });
     }
 
@@ -85,6 +83,8 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      */
     @Override
     public void createInDatabase(BaseDatabaseConnection connection) {
+        this.quests.forEach(quest -> quest.createInDatabase(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     INSERT INTO player_quests (uuid, quests_id)
@@ -118,6 +118,8 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
      */
     @Override
     public void update(BaseDatabaseConnection connection) {
+        this.quests.forEach(quest -> quest.update(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE player_quests
@@ -155,7 +157,7 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
             if (result.next()) {
                 return Optional.of(new PlayerQuests(
                         UUID.fromString(primaryKey),
-                        BaseDatabaseConnection.fetchIntegerListFromString(result.getString(1))
+                        BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
                                 .stream()
                                 .map(id -> new Quest.Initializer().init(id, connection))
                                 .toList()

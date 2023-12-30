@@ -188,6 +188,8 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
 
     @Override
     protected void createInDatabaseImpl(BaseDatabaseConnection connection) {
+        this.objectives.forEach(objective -> objective.createInDatabase(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     INSERT INTO mechanic (objectives_id, type, ended_objectives)
@@ -210,7 +212,9 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
      * @param connection The provided database connection.
      */
     @Override
-    public void update(BaseDatabaseConnection connection) {
+    protected void updateImpl(BaseDatabaseConnection connection) {
+        this.objectives.forEach(objective -> objective.update(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE mechanic

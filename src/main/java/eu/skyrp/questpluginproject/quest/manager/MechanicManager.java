@@ -89,6 +89,8 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
 
     @Override
     protected void createInDatabaseImpl(BaseDatabaseConnection connection) {
+        this.mechanics.forEach(mechanic -> mechanic.createInDatabase(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     INSERT INTO mechanic_manager (mechanics_id, ended_mechanics)
@@ -110,7 +112,9 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
      * @param connection The provided database connection.
      */
     @Override
-    public void update(BaseDatabaseConnection connection) {
+    protected void updateImpl(BaseDatabaseConnection connection) {
+        this.mechanics.forEach(mechanic -> mechanic.update(connection));
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE mechanic_manager

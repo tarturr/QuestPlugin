@@ -1,15 +1,16 @@
 package eu.skyrp.questpluginproject.quest.manager;
 
+import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.loader.QuestLoader;
 import eu.skyrp.questpluginproject.quest.common.PlayerQuests;
 import eu.skyrp.questpluginproject.quest.common.Quest;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class QuestManager implements PropertyChangeListener {
@@ -17,17 +18,17 @@ public class QuestManager implements PropertyChangeListener {
     private final List<PlayerQuests> playerQuests;
     private QuestLoader questLoader;
     private final File parentFolder;
-    private final Economy economy;
 
     private final JavaPlugin main;
+    private final BaseDatabaseConnection connection;
 
-    public QuestManager(JavaPlugin main) {
+    public QuestManager(JavaPlugin main, BaseDatabaseConnection connection) {
         this.playerQuests = new ArrayList<>();
         this.parentFolder = main.getDataFolder();
         this.questLoader = new QuestLoader(this.parentFolder);
-        this.economy = this.setupEconomy(main);
 
         this.main = main;
+        this.connection = connection;
     }
 
     public PlayerQuests getPlayerQuests(UUID uuid) {
@@ -35,6 +36,12 @@ public class QuestManager implements PropertyChangeListener {
 
         if (foundQuests.isEmpty()) {
             PlayerQuests playerQuests = new PlayerQuests(uuid);
+            Optional<PlayerQuests> dbFoundQuests = playerQuests.fetchFromDatabase(uuid.toString(), this.connection);
+
+            if (dbFoundQuests.isPresent()) {
+                playerQuests = dbFoundQuests.get();
+            }
+
             this.playerQuests.add(playerQuests);
             return playerQuests;
         }
@@ -58,7 +65,7 @@ public class QuestManager implements PropertyChangeListener {
         if (searchedQuest.isPresent()) {
             boolean result = quests.add(searchedQuest.get());
             quests.addPropertyChangeListener(this);
-            quests.registerAllQuests(this.main, this.economy);
+            quests.registerAllQuests(this.main);
             return result;
         }
 
@@ -86,17 +93,23 @@ public class QuestManager implements PropertyChangeListener {
         this.questLoader = new QuestLoader(this.parentFolder);
     }
 
-    private Economy setupEconomy(JavaPlugin main) {
-        RegisteredServiceProvider<Economy> rsp = main.getServer().getServicesManager().getRegistration(Economy.class);
+    public void saveAllInDatabase() {
+        this.playerQuests.forEach(playerQuests -> playerQuests.update(this.connection));
+    }
 
-        if (rsp == null) {
-            throw new TypeNotPresentException(
-                    "net.milkbowl.vault.economy.Economy",
-                    new Throwable("[QuestPlugin] The plugin cannot find the Vault dependency. Please consider adding " +
-                            "the Vault plugin to the \"plugins/\" server folder!")
-            );
+    public void fetchAllFromDatabase() {
+        try {
+            ResultSet result = this.connection.get().prepareStatement("SELECT uuid FROM player_quests").executeQuery();
+
+            while (result.next()) {
+                String strUuid = result.getString(1);
+                UUID uuid = UUID.fromString(strUuid);
+
+                PlayerQuests playerQuests = new PlayerQuests(uuid);
+                this.playerQuests.add(playerQuests.fetchFromDatabase(strUuid, this.connection).orElseThrow());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
-        return rsp.getProvider();
     }
 }

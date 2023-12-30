@@ -84,12 +84,19 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
 
         @Override
         public Quest init(String id, ConfigurationSection section) {
-            return (this.quest == null ? this.dispatcher.dispatch(Objects.requireNonNull(section.getString("type"))) : this.quest)
-                    .id(Objects.requireNonNull(section.getString("id")))
-                    .name(Objects.requireNonNull(section.getString("name")))
-                    .lore(section.getStringList("lore"))
-                    .reward(new QuestReward.Initializer().init(id, section.getConfigurationSection("rewards")))
-                    .mechanicManager(new MechanicManager.Initializer().init(id, Objects.requireNonNull(Objects.requireNonNull(section.getParent()).getConfigurationSection("mechanics"))));
+            Quest quest = this.quest == null ? this.dispatcher.dispatch(Objects.requireNonNull(section.getString("type"))) : this.quest;
+
+            quest.id(Objects.requireNonNull(section.getString("id")));
+            quest.type(QuestType.valueOf(Objects.requireNonNull(section.getString("type")).toUpperCase()));
+            quest.name(Objects.requireNonNull(section.getString("name")));
+            quest.lore(section.getStringList("lore"));
+            quest.state(QuestState.NOT_STARTED);
+            quest.reward(new QuestReward.Initializer().init(id, section.getConfigurationSection("rewards")));
+            quest.mechanicManager(new MechanicManager.Initializer().init(id, Objects.requireNonNull(Objects.requireNonNull(section.getParent()).getConfigurationSection("mechanics"))));
+            quest.table("quest");
+            quest.support(new PropertyChangeSupport(quest));
+
+            return quest;
         }
 
         @Override
@@ -146,6 +153,8 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
 
     @Override
     protected void createInDatabaseImpl(BaseDatabaseConnection connection) {
+        this.mechanicManager.createInDatabase(connection);
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     INSERT INTO quest (str_id, state, type, mechanic_manager)
@@ -169,7 +178,9 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
      * @param connection The provided database connection.
      */
     @Override
-    public void update(BaseDatabaseConnection connection) {
+    protected void updateImpl(BaseDatabaseConnection connection) {
+        this.mechanicManager.update(connection);
+
         try {
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE quest
