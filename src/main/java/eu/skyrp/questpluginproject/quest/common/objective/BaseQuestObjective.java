@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.common.objective;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.dispatcher.QuestObjectiveDispatcher;
@@ -66,6 +67,8 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
 
         @Override
         public BaseQuestObjective<?, ?> init(int id, BaseDatabaseConnection connection) {
+            QuestPlugin.logger().info("Objective query with id: " + id);
+            
             try {
                 PreparedStatement statement = connection.get().prepareStatement("""
                     SELECT * FROM objective
