@@ -9,16 +9,15 @@ import org.bukkit.entity.Player;
 
 public class SFPlaceQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockPlaceEvent> {
     /**
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public SFPlaceQuestObjective(String id, String targetId, int amount) {
-        super(SlimefunBlockPlaceEvent.class, MechanicType.PLACE, id, targetId, amount);
+    public SFPlaceQuestObjective(String targetId, int amount) {
+        super(SlimefunBlockPlaceEvent.class, MechanicType.PLACE, targetId, amount);
     }
 
     public SFPlaceQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**

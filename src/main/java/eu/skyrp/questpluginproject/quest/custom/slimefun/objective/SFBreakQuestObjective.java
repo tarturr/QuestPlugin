@@ -9,16 +9,15 @@ import org.bukkit.entity.Player;
 
 public class SFBreakQuestObjective extends BaseSFBlockQuestObjective<SlimefunBlockBreakEvent> {
     /**
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public SFBreakQuestObjective(String id, String targetId, int amount) {
-        super(SlimefunBlockBreakEvent.class, MechanicType.BREAK, id, targetId, amount);
+    public SFBreakQuestObjective(String targetId, int amount) {
+        super(SlimefunBlockBreakEvent.class, MechanicType.BREAK, targetId, amount);
     }
 
     public SFBreakQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**

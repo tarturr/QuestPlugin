@@ -8,12 +8,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class PlaceQuestObjective extends BaseVanillaBlockQuestObjective<BlockPlaceEvent> {
 
     @Builder
-    public PlaceQuestObjective(String id, String targetId, int amount) {
-        super(BlockPlaceEvent.class, MechanicType.PLACE, id, targetId, amount);
+    public PlaceQuestObjective(String targetId, int amount) {
+        super(BlockPlaceEvent.class, MechanicType.PLACE, targetId, amount);
     }
 
     public PlaceQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     @Override

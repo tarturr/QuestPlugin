@@ -17,12 +17,11 @@ public abstract class BaseItemQuestObjective<T extends Event, U> extends BaseQue
     /**
      * Constructeur de la classe ItemStatisticQuestObjective.
      *
-     * @param id         Id de la quête.
      * @param target     Objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseItemQuestObjective(Class<T> eventType, MechanicType type, String id, U target, int amount) {
-        super(eventType, type, id, target, amount);
+    public BaseItemQuestObjective(Class<T> eventType, MechanicType type, U target, int amount) {
+        super(eventType, type, target, amount);
     }
 
     @Override

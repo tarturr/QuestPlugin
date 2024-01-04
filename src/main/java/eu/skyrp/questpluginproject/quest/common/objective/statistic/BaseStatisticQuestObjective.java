@@ -19,13 +19,12 @@ public abstract class BaseStatisticQuestObjective<T> extends BaseQuestObjective<
 
     /**
      * Constructeur de la classe BaseStatisticQuestObjective.
-     * @param id Id de la quête.
      * @param target Objet inclus dans l'objectif de quête.
      * @param type Type de Statistic à vérifier.
      * @param amount Nombre requis pour atteindre le bout de la quête.
      */
-    public BaseStatisticQuestObjective(String id, MechanicType mechanicType, Statistic type, T target, int amount) {
-        super(PlayerStatisticIncrementEvent.class, mechanicType, id, target, amount);
+    public BaseStatisticQuestObjective(MechanicType mechanicType, Statistic type, T target, int amount) {
+        super(PlayerStatisticIncrementEvent.class, mechanicType, target, amount);
         this.type = type;
         super.amount = amount + this.count();
     }

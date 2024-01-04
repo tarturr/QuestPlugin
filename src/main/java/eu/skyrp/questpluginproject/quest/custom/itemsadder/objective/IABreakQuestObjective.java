@@ -8,16 +8,15 @@ import org.bukkit.entity.Player;
 
 public class IABreakQuestObjective extends BaseIABlockQuestObjective<CustomBlockBreakEvent> {
     /**
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public IABreakQuestObjective(String id, String targetId, int amount) {
-        super(CustomBlockBreakEvent.class, MechanicType.BREAK, id, targetId, amount);
+    public IABreakQuestObjective(String targetId, int amount) {
+        super(CustomBlockBreakEvent.class, MechanicType.BREAK, targetId, amount);
     }
 
     public IABreakQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**

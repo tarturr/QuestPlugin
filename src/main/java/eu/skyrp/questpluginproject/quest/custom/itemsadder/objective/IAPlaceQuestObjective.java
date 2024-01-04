@@ -9,16 +9,15 @@ import org.bukkit.event.EventHandler;
 
 public class IAPlaceQuestObjective extends BaseIABlockQuestObjective<CustomBlockPlaceEvent> {
     /**
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public IAPlaceQuestObjective(String id, String targetId, int amount) {
-        super(CustomBlockPlaceEvent.class, MechanicType.PLACE, id, targetId, amount);
+    public IAPlaceQuestObjective(String targetId, int amount) {
+        super(CustomBlockPlaceEvent.class, MechanicType.PLACE, targetId, amount);
     }
 
     public IAPlaceQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**

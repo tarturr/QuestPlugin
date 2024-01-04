@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +25,15 @@ public class TravelQuestObjective extends BaseQuestObjective<PlayerMoveEvent, Ob
     /**
      * Constructeur de la classe BaseQuestObjective.
      *
-     * @param id      Id de la quête.
      * @param regions Les régions qui devront être franchies par le joueur.
      */
-    public TravelQuestObjective(String id, List<String> regions) {
-        super(PlayerMoveEvent.class, MechanicType.TRAVEL, id, null, 0);
+    public TravelQuestObjective(List<String> regions) {
+        super(PlayerMoveEvent.class, MechanicType.TRAVEL, null, 0);
         this.regions = regions;
     }
 
     public TravelQuestObjective() {
-        this(null, null);
+        this(new ArrayList<>());
     }
 
     /**

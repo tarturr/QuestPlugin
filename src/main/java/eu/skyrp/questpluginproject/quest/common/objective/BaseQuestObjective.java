@@ -34,7 +34,6 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
     private final Class<T> eventType;
     private final MechanicType type;
 
-    protected String id;
     protected U target;
     protected int amount;
     private int count;
@@ -45,16 +44,14 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
     /**
      * Constructeur de la classe BaseQuestObjective.
      * @param eventType Le type d'event qui sera utilisé par la quête sous forme d'object {@link Class}.
-     * @param id Id de la quête.
      * @param target Objet inclus dans l'objectif de quête.
      * @param amount L'objectif à atteindre sous forme de chiffre
      */
-    public BaseQuestObjective(Class<T> eventType, MechanicType type, String id, U target, int amount) {
+    public BaseQuestObjective(Class<T> eventType, MechanicType type, U target, int amount) {
         super("objective");
         this.eventType = eventType;
         this.type = type;
 
-        this.id = id;
         this.target = target;
         this.amount = amount;
         this.count = 0;

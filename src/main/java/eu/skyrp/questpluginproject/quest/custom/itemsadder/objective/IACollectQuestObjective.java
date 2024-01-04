@@ -12,16 +12,15 @@ public class IACollectQuestObjective extends BaseItemQuestObjective<EntityPickup
     /**
      * Constructeur de la classe ItemStatisticQuestObjective.
      *
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public IACollectQuestObjective(String id, String targetId, int amount) {
-        super(EntityPickupItemEvent.class, MechanicType.COLLECT, id, targetId == null ? null : itemFromString(targetId), amount);
+    public IACollectQuestObjective(String targetId, int amount) {
+        super(EntityPickupItemEvent.class, MechanicType.COLLECT, targetId == null ? null : itemFromString(targetId), amount);
     }
 
     public IACollectQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**

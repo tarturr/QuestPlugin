@@ -7,16 +7,15 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class BreakQuestObjective extends BaseVanillaBlockQuestObjective<BlockBreakEvent> {
 
     public BreakQuestObjective() {
-        this(null, null, 0);
+        this(null, 0);
     }
 
     /**
-     * @param id         Id de la quête.
      * @param targetId   Id (String) de l'objet inclus dans l'objectif de quête.
      * @param amount     Nombre requis pour atteindre le bout de la quête.
      */
-    public BreakQuestObjective(String id, String targetId, int amount) {
-        super(BlockBreakEvent.class, MechanicType.BREAK, id, targetId, amount);
+    public BreakQuestObjective(String targetId, int amount) {
+        super(BlockBreakEvent.class, MechanicType.BREAK, targetId, amount);
     }
 
     @Override
