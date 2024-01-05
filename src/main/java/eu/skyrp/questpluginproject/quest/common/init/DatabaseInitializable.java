@@ -5,5 +5,6 @@ import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnectio
 public interface DatabaseInitializable<T> {
 
     T init(int id, BaseDatabaseConnection connection);
+    void completeByDBLoadedObject(T src, T loaded);
 
 }

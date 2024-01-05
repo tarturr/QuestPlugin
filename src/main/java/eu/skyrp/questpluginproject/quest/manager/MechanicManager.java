@@ -5,6 +5,7 @@ import eu.skyrp.questpluginproject.lib.database.DatabaseColumnAutoIncrement;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.quest.common.init.Initializable;
 import eu.skyrp.questpluginproject.quest.common.mechanic.BaseMechanic;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -21,12 +22,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+@Accessors(fluent = true)
 public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager> implements PropertyChangeListener {
 
     @Getter
     @Setter
-    @Accessors(fluent = true)
     private List<BaseMechanic<?>> mechanics;
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
     private int endedMechanics;
 
     private final PropertyChangeSupport support;
@@ -77,6 +80,7 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
 
                 if (result.next()) {
                     MechanicManager manager = new MechanicManager(result.getInt(3));
+                    manager.columnId(id);
                     manager.mechanics(
                             BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
                                     .stream()
@@ -91,6 +95,19 @@ public class MechanicManager extends DatabaseColumnAutoIncrement<MechanicManager
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        @Override
+        public void completeByDBLoadedObject(MechanicManager src, MechanicManager loaded) {
+            src.columnId(loaded.columnId());
+
+            BaseMechanic.Initializer initializer = new BaseMechanic.Initializer();
+
+            for (int i = 0; i < src.mechanics.size(); i++) {
+                initializer.completeByDBLoadedObject(src.mechanics().get(i), loaded.mechanics().get(i));
+            }
+
+            src.endedMechanics(src.endedMechanics());
         }
     }
 

@@ -51,6 +51,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
     @Getter
     @Setter
     private MechanicType type;
+    @Getter
     @Setter
     private int endedObjectives;
 
@@ -83,9 +84,9 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         QuestItem item = new QuestItem.Initializer().init(id, section.getConfigurationSection(itemSection));
 
                         switch (item.itemType()) {
-                            case VANILLA -> vanilla.objectives().add(new BreakQuestObjective(itemSection, item.name(), item.amount()));
-                            case ITEMSADDER -> itemsAdder.objectives().add(new IABreakQuestObjective(itemSection, item.name(), item.amount()));
-                            case SLIMEFUN -> slimeFun.objectives().add(new SFBreakQuestObjective(itemSection, item.name(), item.amount()));
+                            case VANILLA -> vanilla.objectives().add(new BreakQuestObjective(item.name(), item.amount()));
+                            case ITEMSADDER -> itemsAdder.objectives().add(new IABreakQuestObjective(item.name(), item.amount()));
+                            case SLIMEFUN -> slimeFun.objectives().add(new SFBreakQuestObjective(item.name(), item.amount()));
                         }
                     }
 
@@ -100,9 +101,9 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         QuestItem item = new QuestItem.Initializer().init(id, section.getConfigurationSection(itemSection));
 
                         switch (item.itemType()) {
-                            case VANILLA -> vanilla.objectives().add(new CollectQuestObjective(itemSection, item.name(), item.amount()));
-                            case ITEMSADDER -> itemsAdder.objectives().add(new IACollectQuestObjective(itemSection, item.name(), item.amount()));
-                            case SLIMEFUN -> slimeFun.objectives().add(new SFCollectQuestObjective(itemSection, item.name(), item.amount()));
+                            case VANILLA -> vanilla.objectives().add(new CollectQuestObjective(item.name(), item.amount()));
+                            case ITEMSADDER -> itemsAdder.objectives().add(new IACollectQuestObjective(item.name(), item.amount()));
+                            case SLIMEFUN -> slimeFun.objectives().add(new SFCollectQuestObjective(item.name(), item.amount()));
                         }
                     }
 
@@ -112,7 +113,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                     ConnectMechanic mechanic = new ConnectMechanic();
 
                     int time = section.getInt("time");
-                    mechanic.objectives().add(new ConnectQuestObjective(section.getName(), time));
+                    mechanic.objectives().add(new ConnectQuestObjective(time));
 
                     yield List.of(mechanic);
                 }
@@ -120,7 +121,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                     KillMechanic mechanic = new KillMechanic();
 
                     int amount = section.getInt("amount");
-                    mechanic.objectives().add(new KillQuestObjective(section.getName(), Objects.requireNonNull(section.getString("type")), amount));
+                    mechanic.objectives().add(new KillQuestObjective(Objects.requireNonNull(section.getString("type")), amount));
 
                     yield List.of(mechanic);
                 }
@@ -133,9 +134,9 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                         QuestItem item = new QuestItem.Initializer().init(id, section.getConfigurationSection(itemSection));
 
                         switch (item.itemType()) {
-                            case VANILLA -> vanilla.objectives().add(new PlaceQuestObjective(itemSection, item.name(), item.amount()));
-                            case ITEMSADDER -> itemsAdder.objectives().add(new IAPlaceQuestObjective(itemSection, item.name(), item.amount()));
-                            case SLIMEFUN -> slimeFun.objectives().add(new SFPlaceQuestObjective(itemSection, item.name(), item.amount()));
+                            case VANILLA -> vanilla.objectives().add(new PlaceQuestObjective(item.name(), item.amount()));
+                            case ITEMSADDER -> itemsAdder.objectives().add(new IAPlaceQuestObjective(item.name(), item.amount()));
+                            case SLIMEFUN -> slimeFun.objectives().add(new SFPlaceQuestObjective(item.name(), item.amount()));
                         }
                     }
 
@@ -146,7 +147,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
 
                     ConfigurationSection parentSection = Objects.requireNonNull(section.getParent());
                     List<String> regionIds = Objects.requireNonNull(parentSection.getStringList(section.getName()));
-                    mechanic.objectives().add(new TravelQuestObjective(section.getName(), regionIds));
+                    mechanic.objectives().add(new TravelQuestObjective(regionIds));
 
                     yield List.of(mechanic);
                 }
@@ -172,7 +173,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    return new MechanicDispatcher().dispatch(result.getString(3))
+                    BaseMechanic<?> mechanic = new MechanicDispatcher().dispatch(result.getString(3))
                             .endedObjectives(result.getInt(4))
                             .objectives(
                                     BaseDatabaseConnection.fetchIntegerListFromString(result.getString(2))
@@ -180,12 +181,29 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
                                             .map(objectiveId -> Optional.ofNullable(new BaseQuestObjective.Initializer().init(objectiveId, connection)).orElseThrow())
                                             .toList()
                             );
+
+                    mechanic.columnId(id);
+                    return mechanic;
                 }
 
                 return null;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        @Override
+        public void completeByDBLoadedObject(BaseMechanic<?> src, BaseMechanic<?> loaded) {
+            src.columnId(loaded.columnId());
+
+            BaseQuestObjective.Initializer initializer = new BaseQuestObjective.Initializer();
+
+            for (int i = 0; i < src.objectives().size(); i++) {
+                initializer.completeByDBLoadedObject(src.objectives().get(i), loaded.objectives().get(i));
+            }
+
+            src.type(loaded.type());
+            src.endedObjectives(loaded.endedObjectives());
         }
     }
 
@@ -222,7 +240,7 @@ public abstract class BaseMechanic<T extends BaseQuestObjective<?, ?>> extends D
             PreparedStatement statement = connection.get().prepareStatement("""
                     UPDATE mechanic
                     SET objectives_id = ?,
-                        ended_objectived = ?
+                        ended_objectives = ?
                     WHERE id = ?
                     """);
 

@@ -12,10 +12,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Accessors(fluent = true)
+@Setter
 @NoArgsConstructor
 public abstract class DatabaseColumnAutoIncrement<T> implements DatabaseColumn<T, Integer> {
 
-    @Setter
     private String table;
 
     @Getter

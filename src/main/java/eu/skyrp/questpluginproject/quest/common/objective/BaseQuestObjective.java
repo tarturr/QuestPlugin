@@ -77,9 +77,13 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    return new QuestObjectiveDispatcher().dispatch(result.getString(2))
+                    BaseQuestObjective<?, ?> quest = new QuestObjectiveDispatcher().dispatch(result.getString(2))
                             .amount(result.getInt(3))
                             .count(result.getInt(4));
+
+                    System.out.println("Fetched quest \"" + id + "\" with count: " + quest.count());
+                    quest.columnId(id);
+                    return quest;
                 }
 
                 return null;
@@ -88,11 +92,19 @@ public abstract class BaseQuestObjective<T extends Event, U> extends DatabaseCol
             }
         }
 
+        @Override
+        public void completeByDBLoadedObject(BaseQuestObjective<?, ?> src, BaseQuestObjective<?, ?> loaded) {
+            src.columnId(loaded.columnId());
+            src.amount(loaded.amount());
+            src.count(loaded.count());
+        }
+
     }
 
     @EventHandler
     public void onEvent(T event) {
         if (!this.hasEnded && this.onEventTriggered(event)) {
+            QuestPlugin.logger().info("ENDED QUEST \"" + super.columnId() + "\"");
             this.hasEnded = true;
             this.endQuestSupport.firePropertyChange("hasEnded", false, true);
         }

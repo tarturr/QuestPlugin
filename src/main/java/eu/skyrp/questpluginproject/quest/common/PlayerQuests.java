@@ -51,6 +51,15 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
         return false;
     }
 
+    public boolean remove(Quest quest) {
+        if (this.quests.stream().anyMatch(playerQuest -> playerQuest.id().equals(quest.id()))) {
+            this.quests.remove(quest);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         Quest changedQuest = this.quests.stream().filter(quest -> quest.id().equals(event.getPropertyName())).findAny().orElseThrow();
@@ -74,6 +83,12 @@ public class PlayerQuests implements PropertyChangeListener, DatabaseColumn<Play
         this.quests.forEach(quest -> {
             quest.mechanicManager().registerAllMechanics(main);
         });
+    }
+
+    public void registerQuest(Quest quest, JavaPlugin main) {
+        if (this.quests.stream().anyMatch(playerQuest -> playerQuest.id().equals(quest.id()))) {
+            quest.mechanicManager().registerAllMechanics(main);
+        }
     }
 
     /**

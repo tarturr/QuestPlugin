@@ -1,5 +1,6 @@
 package eu.skyrp.questpluginproject.quest.manager;
 
+import eu.skyrp.questpluginproject.QuestPlugin;
 import eu.skyrp.questpluginproject.lib.database.connection.BaseDatabaseConnection;
 import eu.skyrp.questpluginproject.loader.QuestLoader;
 import eu.skyrp.questpluginproject.quest.common.PlayerQuests;
@@ -63,9 +64,23 @@ public class QuestManager implements PropertyChangeListener {
         Optional<Quest> searchedQuest = this.questLoader.getQuestById(questId);
 
         if (searchedQuest.isPresent()) {
-            boolean result = quests.add(searchedQuest.get());
-            quests.addPropertyChangeListener(this);
-            quests.registerAllQuests(this.main);
+            Quest quest = searchedQuest.get();
+            boolean result = quests.add(quest);
+
+            if (result) {
+                quests.addPropertyChangeListener(this);
+                quests.registerQuest(quest, this.main);
+            }
+
+            quests.quests().forEach(playerQuest -> {
+                playerQuest.mechanicManager().mechanics().forEach(mechanic -> {
+                    mechanic.objectives().forEach(objective -> {
+                        QuestPlugin.logger().info("Objectif \"" + objective.columnId() + "\": " + objective.count());
+                        QuestPlugin.logger().info("Target: " + objective.target());
+                    });
+                });
+            });
+
             return result;
         }
 
@@ -104,9 +119,21 @@ public class QuestManager implements PropertyChangeListener {
             while (result.next()) {
                 String strUuid = result.getString(1);
                 UUID uuid = UUID.fromString(strUuid);
+                Quest.Initializer initializer = new Quest.Initializer();
 
-                PlayerQuests playerQuests = new PlayerQuests(uuid);
-                this.playerQuests.add(playerQuests.fetchFromDatabase(strUuid, this.connection).orElseThrow());
+                List<Quest> fullyLoadedQuests = new PlayerQuests(uuid).fetchFromDatabase(strUuid, this.connection).orElseThrow()
+                        .quests().stream()
+                        .map(quest -> {
+                            Quest loaded = this.questLoader.getQuestById(quest.id()).orElseThrow();
+                            initializer.completeByDBLoadedObject(loaded, quest);
+                            return loaded;
+                        })
+                        .toList();
+
+                PlayerQuests playerQuests = new PlayerQuests(uuid, fullyLoadedQuests);
+
+                playerQuests.registerAllQuests(this.main);
+                this.playerQuests.add(playerQuests);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

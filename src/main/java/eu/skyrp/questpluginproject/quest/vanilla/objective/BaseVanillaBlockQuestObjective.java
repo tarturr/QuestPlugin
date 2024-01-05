@@ -32,6 +32,8 @@ public abstract class BaseVanillaBlockQuestObjective<T extends BlockEvent> exten
 
         player.sendMessage("Triggered");
 
+        player.sendMessage("Block: " + block.getType() + ", target: " + super.target());
+
         if (!(block.getType() == super.target() && !this.hasElemPlayer(player, block))) {
             return false;
         }

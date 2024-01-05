@@ -117,6 +117,7 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
 
                 if (result.next()) {
                     Quest quest = this.dispatcher.dispatch(result.getString(4));
+                    quest.columnId(id);
 
                     return quest.id(result.getString(2))
                             .state(QuestState.valueOf(result.getString(3)))
@@ -129,6 +130,15 @@ public abstract class Quest extends DatabaseColumnAutoIncrement<Quest> implement
 
             throw new IllegalArgumentException("[QuestPlugin] The quest with the " + id + " ID does not exist in " +
                     "\"quest\" database table.");
+        }
+
+        @Override
+        public void completeByDBLoadedObject(Quest src, Quest loaded) {
+            src.columnId(loaded.columnId());
+            src.id(loaded.id());
+            src.state(loaded.state());
+            src.type(loaded.type());
+            new MechanicManager.Initializer().completeByDBLoadedObject(src.mechanicManager(), loaded.mechanicManager());
         }
 
         public Quest init(YamlConfiguration conf) {
